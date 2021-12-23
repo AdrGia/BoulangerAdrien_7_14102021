@@ -1,0 +1,48 @@
+
+SET NAME utf8mb4_0900_ai_ci;
+
+CREATE TABLE user (
+	userId SMALLINT unsigned NOT NULL AUTO_INCREMENT,
+	firstName VARCHAR(60) NOT NULL,
+	lastName VARCHAR(60) NOT NULL,
+	email VARCHAR(120) NOT NULL UNIQUE,
+	password VARCHAR(100) NOT NULL,
+	avatarUrl VARCHAR(255) DEFAULT NULL,
+	isAdmin TINYINT NOT NULL,
+	PRIMARY KEY(userId)
+);
+
+CREATE TABLE post (
+	postId MEDIUMINT unsigned NOT NULL AUTO_INCREMENT,
+	dateCreation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	userId SMALLINT unsigned DEFAULT NULL,
+	imageUrl VARCHAR(255),
+	content TEXT,
+	PRIMARY KEY(postId)
+);
+
+CREATE TABLE comment (
+	commentId INT unsigned NOT NULL AUTO_INCREMENT,
+	dateCreation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	content TEXT NOT NULL,
+	userId SMALLINT unsigned,
+	postId MEDIUMINT unsigned,
+	PRIMARY KEY(commentId)
+);
+
+CREATE TABLE likes (
+	likeId INT unsigned NOT NULL AUTO_INCREMENT,
+	rate TINYINT NOT NULL,
+	userId SMALLINT unsigned NOT NULL,
+	postId MEDIUMINT unsigned NOT NULL,
+	PRIMARY KEY(likeId)
+);
+
+CREATE TABLE notif (
+	notifId INT unsigned NOT NULL AUTO_INCREMENT,
+	userId SMALLINT unsigned NOT NULL,
+	initiatorId SMALLINT unsigned NOT NULL,
+	postId MEDIUMINT unsigned,
+	typeId TINYINT unsigned NOT NULL,
+	PRIMARY KEY(notifId)
+);
