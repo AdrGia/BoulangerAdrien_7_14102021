@@ -6,7 +6,7 @@ exports.newComment = (req, res, next) => {
 	const userId = res.locals.userId;
 	const postId = req.body.postId;
 	const content = req.body.content;
-	const sql = "INSERT INTO Comments (user_id, post_id, content)\
+	const sql = "INSERT INTO Comment (userId, postId, content)\
   	VALUES (?, ?, ?);";
   	const sqlParams = [userId, postId, content];
 
@@ -31,7 +31,7 @@ exports.newComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
 	const connection = data.connect();
 	const commentId = parseInt(req.params.id, 10);
-	const sql = "DELETE FROM Comments WHERE id=?;";
+	const sql = "DELETE FROM Comment WHERE id=?;";
 	const sqlParams = [commentId];
 
 	connection.execute(sql, sqlParams, (error, results, fields) => {

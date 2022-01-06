@@ -8,7 +8,7 @@ exports.newPost = (req, res, next) => {
   console.log(imageurl);
   console.log(req.file.filename);
 	const content = req.body.content ? req.body.content : null;
-	const sql = "INSERT INTO Posts (user_id, imageurl, content)\ VALUES (?, ?, ?);";
+	const sql = "INSERT INTO Post (userId, imageUrl, content)\ VALUES (?, ?, ?);";
 	const sqlParams = [userId, imageurl, content];
 
 	connection.execute(sql, sqlParams, (error, results, fields) => {
@@ -24,10 +24,10 @@ exports.newPost = (req, res, next) => {
 
 exports.allPosts = (req, res, next) => {
 	const connection = database.connect();
-	const sql = "SELECT Posts.id AS postId, Posts.publication_date AS postDate, Posts.imageurl AS postImage, Posts.content as postContent, Users.id AS userId, Users.name AS userName, Users.pictureurl AS userPicture\
-  	FROM Posts\
-  	INNER JOIN Users ON Posts.user_id = Users.id\
-  	ORDER BY postDate DESC";
+	const sql = "SELECT Post.postId AS postId, Post.dateCreation AS postDate, Post.imageUrl AS postImage, Post.content AS postContent, User.userId AS userId, User.firstname AS userFirstName, User.lastname AS userLastName, User.avatarUrl AS userPicture\
+  FROM Post\
+  INNER JOIN User ON Post.userId = User.userId\
+  ORDER BY postDate DESC";
   	connection.execute(sql, (error, rawPosts, fields) => {
   		if(error) {
   			connection.end();
@@ -54,11 +54,11 @@ exports.allPosts = (req, res, next) => {
 exports.onePost = (req, res, next) => {
 	const connection = database.connect();
 	const postId = parseInt(req.params.id);
-	const sql = "SELECT Posts.id AS postId, Posts.publication_date AS postDate, Posts.imageurl AS postImage, Posts.content as postContent, Users.id AS userId, Users.name AS userName, Users.pictureurl AS userPicture\
-  	FROM Posts\
- 	INNER JOIN Users ON Posts.user_id = Users.id\
-  	WHERE Posts.id = ?\
-  	ORDER BY postDate DESC";
+	const sql = "SELECT Post.postId AS postId, Post.dateCreation AS postDate, Post.imageUrl AS postImage, Post.content AS postContent, User.userId AS userId, User.firstname AS userFirstName, User.lastname AS userLastName, User.avatarUrl AS userPicture\
+  FROM Post\
+  INNER JOIN User ON Post.userId = User.userId\
+  WHERE Post.postId = ?\
+  ORDER BY postDate DESC";
   	const sqlParams = [postId];
 
   	connection.execute(sql, sqlParams, (error, rawPosts, fields) => {
@@ -84,7 +84,7 @@ exports.onePost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
 	const connection = database.connect();
 	const postId = parseInt(req.params.id, 10);
-	const sql = "DELETE FROM Posts WHERE id=?;";
+	const sql = "DELETE FROM Post WHERE id=?;";
 	const sqlParams = [postId];
 
 	connection.execute(sql, sqlParams, (error, results, fields) => {
@@ -100,10 +100,10 @@ exports.deletePost = (req, res, next) => {
 
 exports.getCommentsOfEachPosts = (posts, connection) => {
 	return Promise.all(posts.map( post => {
-	const sql = "SELECT Comments.id AS commentId, Comments.publication_date AS commentDate, Comments.content As commentContent, Users.id AS userId, Users.name AS userName, Users.pictureurl AS userPicture\
-                FROM Comments\
-                INNER JOIN Users ON Comments.user_id = Users.id\
-                WHERE Comments.post_id = ?";
+	const sql = "SELECT Comment.commentId AS commentId, Comment.dateCreation AS commentDate, Comment.content As commentContent, Users.userId AS userId, User.FirstName AS firstName, User.LastName AS latName User.avatarUrl AS userPicture\
+                FROM Comment\
+                INNER JOIN User ON Comment.userId = User.userId\
+                WHERE Comment.postId = ?";
     const sqlParams =  [post.postId];
     	return new Promise ((resolve, reject) => {
     		connection.execute(sql, sqlParams, (error, comments, fields) => {

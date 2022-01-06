@@ -37,12 +37,3 @@ CREATE TABLE likes (
 	postId MEDIUMINT unsigned NOT NULL,
 	PRIMARY KEY(likeId)
 );
-
-CREATE TABLE notif (
-	notifId INT unsigned NOT NULL AUTO_INCREMENT,
-	userId SMALLINT unsigned NOT NULL,
-	initiatorId SMALLINT unsigned NOT NULL,
-	postId MEDIUMINT unsigned,
-	typeId TINYINT unsigned NOT NULL,
-	PRIMARY KEY(notifId)
-);

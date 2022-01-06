@@ -25,9 +25,9 @@ exports.login = (req, res, next) => {
 
 	const email = req.body.email;
 	const password = req.body.password
-	const sqlFindUser = "SELECT user_id, email, password, name, avatarUrl FROM users WHERE email = ?";
+	const sql = "SELECT userId, firstname, lastname, email, password, avatarUrl, isAdmin FROM users WHERE email = ?";
 
-	connection.execute(sqlFindUser, [email], (error, results, fields) =>{
+	connection.execute(sql, [email], (error, results, fields) =>{
 		if (error) {
 			return res.status(500).json(error.message);
 		} else if (results.length == 0) {
@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
 					token: jwt.sign(
 					{ userID: result[0].userID },
 					env.token,
-					{ expiresIn: "24h" }
+					{ expiresIn: "1d" }
 						)
 				});
 			}) 
@@ -58,7 +58,7 @@ exports.deleteAccount = (req, res, next) => {
 	const connection = database.connect();
 	const password = req.body.password;
 	const userId = res.locals.userId;
-	const sql = "DELETE FROM Users WHERE id=?";
+	const sql = "DELETE FROM User WHERE userId=?";
 	const sqlParams = [userId];
 	connection.execute(sql, sqlParams, (error, results, fields) => {
 		if (error) {
@@ -76,7 +76,7 @@ exports.changeDescription = (req, res, next) => {
 	const connection = database.connect();
 	const description = req.body.description;
 	const userId = req.params.id;
-	const slq = "UPDATE Users SET description=? WHERE id=?";
+	const sql = "UPDATE User SET description=? WHERE userId=?";
 	connection.excute(sql, sqlParams, (error, results, fields) => {
 		if(error) {
 			res.status(500).json({ "error": error.sqlMessage});
@@ -93,7 +93,7 @@ exports.changeProfilePicture = (req, res, next) => {
 	const connection = database.connect();
 	const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 	const userId = req.params.id;
-	const sql = "UPDATE Users SET avatarUrl=? WHERE id=?";
+	const sql = "UPDATE User SET avatarUrl=? WHERE userId=?";
 	const sqlParams = [avatarUrl, userId];
 	connection.execute(sql, sqlParams, (error, results, fields) => {
 		if(error) {
@@ -111,7 +111,7 @@ exports.changeAdmin = (req, res, next) => {
 	const connection = database.connect();
 	const isadmin = req.body.isadmin;
 	const userId = req.params.id;
-	const sql = "UPDATE Users SET isadmin=? WHERE id=?";
+	const sql = "UPDATE User SET isAdmin=? WHERE userId=?";
 	const sqlParams = [isadmin, userId];
 	connection.execute(sql, slqParams, (error, results, fields) =>{
 		if (error) {
