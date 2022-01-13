@@ -1,30 +1,42 @@
 
-<template></template>
+<template>
+
+<div class="content">
+	
+</div>
+
+</template>
 
 <script>
 
+import LoginNav from "@/components/LoginNav.vue";
+import LoginInfo from "@/components/LoginInfo.vue";
+
 export default {
 	name: "Login",
-},
+}
 data: () => {
 	return {
 	email: "",
 	password: "",
 	message: null,
 	};
-},
+}
 methods : {
 
-	updateData(data){
+	updateData(data) {
 	this.email = data.email;
 	this.password = data.password;
 	},
 
 	login() {
-	this.login
+	this.$axios
 	.post("user/login", this.data)
 	.then((data) => {
 	sessionStorage.setItem("token", data.token);
+	this.$axios.defaults.headers.common["Authorization"] =
+	"Bearer" + data.data.token;
+	this.router.push('Feed');
 	})
 	.catch((error)=> {
 	if(error.response.status === 401) {
@@ -36,6 +48,10 @@ methods : {
 	sessionsStorage.removeItem("token");
 	});
 	},
+	mounted();
+	sessionStorage.removeItem('token');
+	delete.this$axios.defaults.headers.common["Authorization"];
+	document.title = "Se connecter";
 },
 
 </script>
