@@ -1,5 +1,7 @@
 
-<template></template>
+<template>
+	<div class="alert" v-blind class="alertType" role="alert">{{ alertMessage }}</div>
+</template>
 
 <script>
 

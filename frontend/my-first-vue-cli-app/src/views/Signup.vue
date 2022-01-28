@@ -1,8 +1,11 @@
 
 <template>
-
+	<loginNav></loginNav>
 	<div class="content">
-
+		<signupInfo validateText="S'Inscrire" v-on:data-sent="udpateDataSignup"
+		v-on:request-sent="signup">
+			<template v-slot: messageError>{{ message }}</template>
+		</signupInfo>
 	</div>
 
 </template>
@@ -11,15 +14,13 @@
 
 import LoginNav from "@/components/LoginNav.vue";
 import SignupInfo from "@/components/SignupInfo.vue";
-import LoginInfo from "@/components/LoginInfo.vue";
 
 export default {
 	name: "Signup",
 	components:{
 		LoginNav,
-		LoginInfo,
 		SignupInfo,
-	}
+	},
 	data: () => {
 		return {
 			email: "",
@@ -35,23 +36,20 @@ export default {
 
       		this.firstName = data.firstName;
       		this.lastName = data.lastName;
+      		this.email = data.email;
+      		this.password = data.password;
     	},
-
-		updateDataLogin(data) {
-			this.email = data.email;
-			this.password = data.password;
-		},
 
 		signup() {
 			this.$axios
-			.post("user/newUser", this.data)
+			.post("user/newuser", this.data)
 			.then(() => {
 				this.$axios.post('user/login', this.data).then((data) => {
 				sessionStorage.setItem('token', data.token);
 					this.$axios.defaults.headers.common["Authorization"];
 					this.router.push('Feed');
 				})
-			});
+			})
 			.catch((error) => {
 				if(error.response.status === 500) {
 				this.message = "Erreur serveur";		
@@ -59,11 +57,11 @@ export default {
 
 			sessionStorage.removeItem('token');
 		});
-	};
+	},
 	
 		mounted() {
-		document.title = "Création de compte"
+		document.title = "Création de compte";
 		},
-};
+},
 
 </script>

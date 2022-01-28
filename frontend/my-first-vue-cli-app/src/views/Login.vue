@@ -1,9 +1,12 @@
 
 <template>
-
-<div class="content">
-	
-</div>
+	<loginNav></loginNav>
+	<div class="content">
+		<loginInfo validateText="Se Connecter" v-on:data-sent="updateDataLogin" 
+		v-on:requet-sent="login">
+			<template v-slot:messageError>{{ message }}</template>
+		</loginInfo>
+	</div>
 
 </template>
 
@@ -49,10 +52,15 @@ methods : {
 			if(error.response.status === 500) {
 				this.message = "Erreur serveur";
 			}
-		sessionsStorage.removeItem("token");
+			sessionStorage.removeItem("token");
 			});
 		},
 	},
+	mounted() {
+		sessionStorage.removeItem("token");
+		delete this.$axios.defaults.headers.common["Authorization"];
+		document.tittle = "Se connecter"
+	}
 };	
 
 </script>
