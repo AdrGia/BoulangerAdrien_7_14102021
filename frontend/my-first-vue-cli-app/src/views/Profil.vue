@@ -1,109 +1,135 @@
 
 <template>
-	
-	<div class="card">	
-    <div class="img">
-	<button class"imageButton">Changer la photo</button>
-	</div>
-    <div class="infos">
-    <h3>Nom</h3>
-    <h3>Prénom</h3>
-    <h3>Email</h3>
-    </div>
-    <div class="section">
-    <div class="modifyPass">
-    <h3>Changer votre Mot de Passe :</h3>
-    <label>Mot Passe Actuel <input type="text"></label>
-    <label>Nouveau Mot Passe <input type="text"></label>
-    <button class"changePassword">Valider</button>
-    </div>
-    <div class="links">
-    <h3>Supprimer votre Compte</h3>
-    <button class="deleteButton">Supprimer</button>
-	</div>
-	</div>
+	<div class="container">
+		<section>
+			<div class="container-profil">
+				<div class="img"></div>
+				<button class="button-img" v-on:click="modifyImage">Image de profile</button>
+				<div class="infos">
+					<h3>Nom</h3>
+					<h3>Prénom</h3>
+					<h3>Mail</h3>
+				</div>
+				<div class="password-modify">
+					<h3>Changer de mot passe :</h3>
+					<h4>Mot passe actuel :</h4>
+					<input/>
+					<h4>Nouveau mot passe :</h4>
+					<input/>
+          <h4>Confirmation du nouveau mot passe :</h4>
+          <input/>
+					<button class="change-password" v-on:click="modifyPassword">Valider</button>
+				</div>
+				<div class="delete-profil">
+					<h3>Supprimer votre compte</h3>
+					<button class="delete-button" v-on:click="deleteProfil">Supprimer</button>
+				</div>
+			</div>
+		</section>
 	</div>
 </template>
 
 <script>
-
-import Alert from "@/components/Alert.vue";
-export default {
-	name: "Profil",
-	components: {
-		Alert
-	},
-	data: () => {
-		return {
-			connected: true,
-			messageError: null,
-			alert: {
-				type: "",
-				mesaage: "",
-			},
-			user: {},
-		};
-	},
-}
+  export default {
+    name: "Profil",
+    data: () => {
+      return {
+        connected: true,
+        messageError: null,
+        alert: {
+          type: "",
+          message: "",
+        },
+        user: {},
+      };
+    },
+    methods: {
+      modifyPassword() {
+        const oldPassword = document.getElementById("oldPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const formData = new formData();
+        this.$axios
+          if(oldPassword == "" || newPassword == "" || confirmPassword == "") {
+            alert();
+          } else if (oldPassword == newPassword) {
+            alert();
+          } else if (newPassword != confirmPassword) {
+            alert();
+          }
+      },
+      modifyImage() {
+        const image = event.target.files[0];
+        const formData = new formData();
+        formData.append("image", image);
+        this.$axios
+          .put("user/changeProfilePicture", formData)
+          .then(() => {
+            this.getUser();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+      deleteProfil() {
+        const password = document.getElementById("passwordDelete").value;
+        this.$axios
+        .delete("user/deleteAccount", {data : { password: password} })
+        .then(() => {
+          sessionStorage.removeItem("token");
+          delete this.$axios.defaults.headers.common["Authorization"];
+          this.$router.push({ name: "Login"})
+        })
+        .catch((error) => {
+          if(error.response.status === 401) {
+            this.messageError = "Mot de passe invalidé";
+          }
+        });
+      },
+    },
+  }
 
 </script>
 
 <style lang="css">
+	@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;700&display=swap');
 
-body {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+section {
   font-family: 'Poppins', sans-serif;
+  display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  background:  
 }
-img {
-  max-width: 100%;
-  display: block;
-}
-.card::after,
-.card img {
-  border-radius: 50%;
-}
-body,
-.card {
-  display: flex;
+.container-profil {
   flex-flow: wrap;
-}
-.card {
   padding: 2.5rem 2rem;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, .5);
-  max-width: 700px;
   box-shadow: 0 0 30px rgba(0, 0, 0, .15);
+  max-width: 700px;
   margin: 1rem;
   position: relative;
   transform-style: preserve-3d;
   overflow: hidden;
 }
-.card::after {
+.container-profil::after {
   content: '';
   position: absolute;
   z-index: -1;
-  height: 15rem;
-  width: 15rem;
-  background-color: #4172f5aa;
+  height: 17rem;
+  width: 17rem;
+  background-color: #FFD7D7;
   top: -8rem;
   right: -8rem;
-  box-shadow: 2rem 6rem 0 -3rem #FFF
-}
-.card img {
-  width: 10rem;
-  min-width: 80px;
-  box-shadow: 0 0 0 5px #FFF;
-}
-.infos {
-  margin-left: 1.5rem;
-  font-size: 1.3rem;
-}
-
-input {
-  
-  font-size: 1rem;
+  box-shadow: 2rem 6rem 0 -3rem #FFF;
+  border-radius: 50%;
 }
 button {
   font-family: 'Poppins', sans-serif;
@@ -116,23 +142,27 @@ button {
   cursor: pointer;
   transition: all .25s linear;
 }
-.imageButton .img {
-  display: flex;
-  flex-direction: column;
+.infos {
+ margin-top: 30px;
 }
-.section {
-  display: flex;
-  flex-flow: column wrap;
+.password-modify {
+  margin-top: 40px;
+  margin-bottom: 30px;
 }
-
-label {
-  display: flex;
+h3 {
+  margin-bottom: 10px;
 }
-@media screen and (max-width: 450px) {
- .card {
-    display: block;
-  }
- .links button {
-    min-width: 100px;
-
+.change-password {
+  display: flex;
+  justify-content: center;
+}
+input {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+img {
+  max-width: 100%;
+  display: block; 
+}
 </style>

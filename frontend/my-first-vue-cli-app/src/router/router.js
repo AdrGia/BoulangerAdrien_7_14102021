@@ -1,6 +1,6 @@
 
 import Vue from 'vue';
-import VueRtouer from 'vue-router';
+import VueRouter from 'vue-router';
 import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
 import Profil from '../views/Profil.vue';

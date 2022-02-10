@@ -1,11 +1,11 @@
 
 <template>
-	<loginNav></loginNav>
-	<div class="content">
-		<signupInfo validateText="S'Inscrire" v-on:data-sent="udpateDataSignup"
-		v-on:request-sent="signup">
+		<div class="container">
+			<loginNav/>
+			<signupInfo validateText="S'Inscrire" v-on:data-sent="udpateDataSignup"
+			v-on:request-sent="signup">
 			<template v-slot: messageError>{{ message }}</template>
-		</signupInfo>
+			</signupInfo>
 	</div>
 
 </template>
@@ -17,7 +17,7 @@ import SignupInfo from "@/components/SignupInfo.vue";
 
 export default {
 	name: "Signup",
-	components:{
+	components: {
 		LoginNav,
 		SignupInfo,
 	},
@@ -31,37 +31,32 @@ export default {
 		};
 	},
 	methods: {
-	
-		updateDataSignup(data) {
-
-      		this.firstName = data.firstName;
-      		this.lastName = data.lastName;
-      		this.email = data.email;
-      		this.password = data.password;
-    	},
-
+		udpateDataSignup(data) {
+			this.firstName = data.firstName;
+			this.lastName = data.lastName;
+			this.email = data.email;
+			this.password = data.password;
+		},
 		signup() {
 			this.$axios
 			.post("user/newuser", this.data)
 			.then(() => {
-				this.$axios.post('user/login', this.data).then((data) => {
-				sessionStorage.setItem('token', data.token);
+				this.$axios.post('user/signup', this.data).then((data) =>{
+					sessionStorage.setItem('token', data.token);
 					this.$axios.defaults.headers.common["Authorization"];
-					this.router.push('Feed');
+					this.$router.push('Feed');
 				})
 			})
 			.catch((error) => {
-				if(error.response.status === 500) {
-				this.message = "Erreur serveur";		
-			}
-
-			sessionStorage.removeItem('token');
-		});
-	},
-	
-		mounted() {
-		document.title = "Création de compte";
+				if(error.reponse.status === 500) {
+					this.message = "Erreur du serveur";
+				}
+				sessionStorage.removeItem('token');
+			});
 		},
-},
-
+		mounted() {
+			document.title = "Création du compte";
+		},
+	},
+};
 </script>

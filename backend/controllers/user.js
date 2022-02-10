@@ -71,21 +71,17 @@ exports.deleteAccount = (req, res, next) => {
 	connection.end();
 }
 
-exports.changeDescription = (req, res, next) => {
+exports.changeProfilePassword = (req, res, next) => {
 
 	const connection = database.connect();
-	const description = req.body.description;
-	const userId = req.params.id;
-	const sql = "UPDATE User SET description=? WHERE userId=?";
-	connection.excute(sql, sqlParams, (error, results, fields) => {
+	const searchId = req.params.id;
+	const sql = "SELECT password FROM Users WHERE id=?";
+	const sqlParams = [searchId];
+	connection.execute(sql, sqlParams, (error, results, fields) => {
 		if(error) {
-			res.status(500).json({ "error": error.sqlMessage});
-		} else {
-			res.status(201).json({ message: "Descriptopn du profil modifiée"});
+			res.status(500).json({ "error": error.sqlMessage });
 		}
-	});
-
-	connection.end();
+	})
 }
 
 exports.changeProfilePicture = (req, res, next) => {

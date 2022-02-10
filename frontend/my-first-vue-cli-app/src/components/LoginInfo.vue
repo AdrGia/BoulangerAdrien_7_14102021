@@ -1,6 +1,6 @@
 
 <template>
-	<div class="content">
+	<div class="container">
 		
 			<label for="email">Entrez votre Adresse Mail</label>
 			<input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
@@ -10,7 +10,7 @@
 			<input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
 			maxlenght="120" v-model="password" v-on:input="sendData"/>
 			<div class="buttonOn">
-			<button name="button">Connexion</button>
+			<button class="buttonLogin" type="submit" v-on:click="sendRequest">Connexion</button>
 			</div>
 	</div>
 </template>
