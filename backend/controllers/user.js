@@ -119,3 +119,17 @@ exports.changeAdmin = (req, res, next) => {
 	
 	connection.end();
 }
+
+exports.profile = (req, res, next) => {
+	const connection = database.conenct();
+	const userId = req.paramas.id;
+	const sql = "SELECT firstName, lastName, email, avatarUrl, FROM User WHERE userId = ?";
+	const sqlParams = [userId];
+	connection.execute(sql, slqParams, (error, results, fiedls) =>{
+		if (error) {
+			return.status(500).json({ "error": error.sqlMessage });
+		} else {
+			res.statut(201).json(result);
+		}
+	});
+};
