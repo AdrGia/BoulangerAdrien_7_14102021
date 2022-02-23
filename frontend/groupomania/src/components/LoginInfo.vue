@@ -3,13 +3,13 @@
 		
 			<label for="email">Entrez votre Adresse Mail</label>
 			<input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-			maxlenght="120" v-model="email" v-on:input="sendData"/>
+			maxlenght="120" v-on:input="sendData"/>
 	
 			<label for="password">Entrez votre Mot Passe</label>
 			<input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-			maxlenght="120" v-model="password" v-on:input="sendData"/>
-			<div class="buttonOn">
-			<button class="buttonLogin" type="submit" v-on:click="sendRequest">Connexion</button>
+			maxlenght="120" v-on:input="sendData"/>
+			<div class="button-on">
+			<button class="button-login" type="submit" v-on:click="sendRequest">{{ validateText }}</button>
 			</div>
 	</div>
 </template>
@@ -18,6 +18,7 @@
 
 export default {
 	name: "LoginInfo",
+	props: ["validateText"],
 	data : () => {
 		return {
 			email: "",
@@ -26,11 +27,11 @@ export default {
 	},
 	methods: {
 		sendData() {
-			this.$emit("data-sent", this.data);
+			this.$emit("data-sent", this.$data);
 		},
 		sendRequest() {
-			const emailValid = document.getElementById("email").checkValid();
-			const passwordValid = document.getElementById("password").checkValid();
+			const emailValid = document.getElementById("email").checkValidity();
+			const passwordValid = document.getElementById("password").checkValidity();
 			if(emailValid && passwordValid){
 				this.$emit("request-sent");
 			}

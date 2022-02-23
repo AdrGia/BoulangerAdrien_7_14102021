@@ -1,5 +1,5 @@
 <template>
-	<hearder>
+	<header>
     <h1>
       <img class="image-logo" alt="Groupomania" src="../assets/icon-above-font.svg">
     </h1>
@@ -9,7 +9,7 @@
         <router-link to="/Signup">S'inscrire</router-link>
       </div>
     </nav>
-  </hearder>  
+  </header>  
 </template>
 
 <script>

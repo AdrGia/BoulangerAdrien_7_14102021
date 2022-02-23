@@ -1,10 +1,10 @@
 <template>
 		<div class="container">
 			<loginNav/>
-			<signupInfo validateText="S'Inscrire" v-on:data-sent="udpateDataSignup"
-			v-on:request-sent="signup">
+			<signupInfo v-on:data-sent="udpateDataSignup"></signupInfo>
+			<loginInfo validateText="S'inscrire" v-on:data-sent="updateData" v-on:request="signup">	
 			<template v-slot: messageError>{{ message }}</template>
-			</signupInfo>
+			</loginInfo>
 	</div>
 
 </template>
@@ -13,11 +13,13 @@
 
 import LoginNav from "@/components/LoginNav.vue";
 import SignupInfo from "@/components/SignupInfo.vue";
+import LoginInfo from "@/components/LoginInfo.vue";
 
 export default {
 	name: "Signup",
 	components: {
 		LoginNav,
+		LoginInfo,
 		SignupInfo,
 	},
 	data: () => {
@@ -33,6 +35,8 @@ export default {
 		udpateDataSignup(data) {
 			this.firstName = data.firstName;
 			this.lastName = data.lastName;
+		},
+		updateData(data) {
 			this.email = data.email;
 			this.password = data.password;
 		},

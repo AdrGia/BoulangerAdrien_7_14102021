@@ -2,27 +2,11 @@
     <div class="container">
         
             <label for="name">Entrez votre Prénom</label>
-            <input type="text" id="firstName" maxlenght="30" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" v-model="firstName"
-            v-on:input="sendData"/> 
+            <input type="text" id="firstName" maxlenght="30" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" v-on:input="sendData"/> 
         
         
             <label for="name">Entrez votre Nom</label>
-            <input type="text" id="lastName" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" maxlenght="30" v-model="lastName"
-            v-on:input="sendData"/>
-       
-        
-            <label for="email">Entrez votre Adresse Mail</label>
-            <input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-model="email" v-on:input="sendData"/>
-        
-        
-            <label for="password">Entrez votre Mot Passe</label>
-            <input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-model="password" v-on:input="sendData"/>
-        
-         <div class="buttonOn"> 
-           <button class="buttonSignup" type="submit" v-on:click="sendRequest">S'incrire</button>
-         </div>
+            <input type="text" id="lastName" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" maxlenght="30" v-on:input="sendData"/>
 
     </div>
 </template>
@@ -35,23 +19,18 @@ export default {
         return {
             firstName: "",
             lastName: "",
-            email:"",
-            password:"",
         };
     },
-   sendData() {
-        this.$emit("data-sent", this.$data);
-      },
-      sendRequest() {
-        const firstNameValid = document.getElementById("firstName").checkValidity();
-        const lastNameValid = document.getElementById("lastName").checkValidity();
-        const emailValid = document.getElementById("email").checkValidity();
-        const passwordValid = document.getElementById("password").checkValidity();
-        if(firstNameValid && lastNameValid && emailValid && passwordValid) {
-          this.$emit("request-sent")
-        }
-      },
-};
+   methods : { 
+    sendData() {
+     const firstNameValid = document.getElementById("firtName")
+     const lastNameValid = document.getElementById("lastName")
+     if(firstNameValid && lastNameValid) {
+      this.$emit("data-sent", this.$data);
+      }
+    },  
+  },
+};  
 </script>
 
 <style lang="css">

@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<loginNav/>
-		<loginInfo validateText="Se Connecter" v-on:data-sent="updateDataLogin" 
+		<loginInfo validateText="Se Connecter" v-on:data-sent="updateData" 
 		v-on:requet-sent="login">
 			<template v-slot:messageError>{{ message }}</template>
 		</loginInfo>

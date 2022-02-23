@@ -11,6 +11,10 @@
   v-model="legend"
   v-on:input="sendPost"
   ></textarea>
+  <div class="custom-file">
+    <img src=""/>
+    <input type="file" accept="image/*" id="custom-file-input" v-on:change="sendFile($event)"/>
+   </div>
   <button class="buttonPost" v-on:click="sendPost">Publier</button>
 </form>
 
@@ -20,6 +24,7 @@
     data: () => {
       return {
         legend: "",
+        image: "",
       };
     },
     methods: {
@@ -28,8 +33,12 @@
         if(formValid) {
           this.$emit("post-sent", this.$data);
           document.getElementByName("legend")[0].value = null;
+          document.getElementByName("image")[0].value = null;
         }
       },
+      sendFile(event) {
+        this.$data.image = event.target.files[0];
+      }
     },
   };
 </script>
@@ -38,10 +47,10 @@
 form {
   display: flex;
   flex-flow: column wrap;
-  
+  align-items: center;
 }
 textarea {
- width: 350px;
+ width: 700px;
 }
 button {
   margin-top: 30px;
@@ -53,6 +62,9 @@ button {
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  transition: all .25s linear;  
+  transition: all .25s linear;
+}
+.createPost {
+  margin-top : 100px;
 }
 </style>
