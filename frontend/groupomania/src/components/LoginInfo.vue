@@ -8,17 +8,12 @@
 			<label for="password">Entrez votre Mot Passe</label>
 			<input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
 			maxlenght="120" v-on:input="sendData"/>
-			<div class="button-on">
-			<button class="button-login" type="submit" v-on:click="sendRequest">{{ validateText }}</button>
-			</div>
 	</div>
 </template>
 
 <script>
-
 export default {
 	name: "LoginInfo",
-	props: ["validateText"],
 	data : () => {
 		return {
 			email: "",
@@ -38,25 +33,21 @@ export default {
 		},
 	},
 };
-
 </script>
 
 <style lang="css">
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;700&display=swap');
 body {
   font-family: 'Poppins', sans-serif;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
+  
 }
-
 body {
   display: flex;
   flex-flow: wrap;
-  font-size: 1.2rem
+  font-size: 1.2rem;
 }
-
 input {
   
   font-size: 1.2rem;
@@ -79,6 +70,4 @@ button {
   display: flex;
   justify-content: center;
 }
-
-
 </style>

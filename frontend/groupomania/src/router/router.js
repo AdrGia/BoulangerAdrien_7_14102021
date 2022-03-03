@@ -18,7 +18,7 @@ const routes = [
 
 {
 
-	path: '/',
+	path: '/Login',
 	name: 'Login',
 	component: Login
 },
@@ -31,7 +31,7 @@ const routes = [
 },
 
 {
-	path: '/Feed',
+	path: '/',
 	name: 'Feed',
 	component: Feed
 },

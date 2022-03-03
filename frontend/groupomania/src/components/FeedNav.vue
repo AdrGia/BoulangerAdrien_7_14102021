@@ -1,11 +1,14 @@
 
 <template>
+  <nav>
+    <img class="image-logo" alt="Groupomania" src="../assets/icon.svg">
 	<div class="navbar">
-		<div class="logo"><img src="https://projet-7.dev-web.fr/assets/logo/logo.png" alt="logo"></div>
-		<button class="navBtn">Profile</button>
-		<button class="navBtn">Notification</button>
-		<button class="navBtn">Déconnexion</button>
+    <router-link :to="{ name: 'Profile', params: {id: 'yourProfile' } }">
+     <button class="navBtn">Profile</button> 
+    </router-link>
+    <router-link to="/"><button class="navBtn">Déconnexion</button></router-link>
 	</div>
+</nav>
 </template>
 
 <script>
@@ -18,16 +21,7 @@
 
 <style lang="css">
 
-.navbar {
-  display: flex;
-  justify-content: space-around;
-  place-items: center;
-  margin-top: 30px;
-}
-img {
- width: 300px;
-  
-}
+
 input {
   font-size: 1.3rem;
   border-radius: 5px;
@@ -37,7 +31,7 @@ input {
   height: 30px;
   margin: 0;
   width: 100px;
-  margin-right: 10px;
+  margin-right: 30px;
   background-color: #fff;
   border: 0;
   box-shadow: inset 0 0 0 0 #FFD7D7;
@@ -48,4 +42,18 @@ input {
  .navBtn:hover {
   box-shadow: inset 0 50px 50px 0 #FFD7D7;
 }
+
+.image-logo {
+  width: 300px;
+  margin-top: -20px;
+ 
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
 </style>

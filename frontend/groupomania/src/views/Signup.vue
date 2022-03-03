@@ -1,25 +1,20 @@
 <template>
 		<div class="container">
 			<loginNav/>
-			<signupInfo v-on:data-sent="udpateDataSignup"></signupInfo>
-			<loginInfo validateText="S'inscrire" v-on:data-sent="updateData" v-on:request="signup">	
-			<template v-slot: messageError>{{ message }}</template>
-			</loginInfo>
+			<signupInfo v-on:data-sent="udpateData"></signupInfo>
+			<button class="button-login" type="submit" v-on:click="signup">S'inscrire</button>
 	</div>
 
 </template>
 
 <script>
-
 import LoginNav from "@/components/LoginNav.vue";
 import SignupInfo from "@/components/SignupInfo.vue";
-import LoginInfo from "@/components/LoginInfo.vue";
 
 export default {
 	name: "Signup",
 	components: {
 		LoginNav,
-		LoginInfo,
 		SignupInfo,
 	},
 	data: () => {
@@ -32,17 +27,15 @@ export default {
 		};
 	},
 	methods: {
-		udpateDataSignup(data) {
+		udpateData(data) {
 			this.firstName = data.firstName;
 			this.lastName = data.lastName;
-		},
-		updateData(data) {
 			this.email = data.email;
 			this.password = data.password;
 		},
 		signup() {
 			this.$axios
-			.post("user/newuser", this.data)
+			.post("user/signup", this.data)
 			.then(() => {
 				this.$axios.post('user/signup', this.data).then((data) =>{
 					sessionStorage.setItem('token', data.token);

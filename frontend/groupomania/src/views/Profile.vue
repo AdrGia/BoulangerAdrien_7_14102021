@@ -18,15 +18,15 @@
           <div class="password-modify">
             <h3>Changer de mot passe :</h3>
             <h4>Mot passe actuel :</h4>
-            <input id="oldPassword" type="password"/>
+            <input class="input-profile" id="oldPassword" type="password"/>
             <h4>Nouveau mot passe :</h4>
-            <input id="newPassword" type="password"/>
+            <input class="input-profile" id="newPassword" type="password"/>
             <h4>Confirmation du nouveau mot passe :</h4>
-            <input id="confirmPassword" type="password"/>
+            <input class="input-profile" id="confirmPassword" type="password"/>
             <button class="change-password" v-on:click="modifyPassword">Valider</button>
           </div>
           <div class="delete-profil">
-            <h3>Supprimer votre compte</h3>
+            <h3>Supprimer votre compte :</h3>
             <input class="password" type="password" id="passwordDelete"/>
             <button class="delete-button" type="submit" v-on:click="deleteProfil">Supprimer</button>
           </div>
@@ -136,8 +136,8 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background:  
+  margin-top: 200px;
+  
 }
 .container-profil {
   flex-flow: wrap;
@@ -184,11 +184,15 @@ button {
 }
 h3 {
   margin-bottom: 10px;
-}
-.change-password  {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
+
+h4 {
+  display: flex;
+  justify-content: flex-start;
+}
+
 input {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -214,8 +218,5 @@ img {
   cursor: pointer;
   transition: all .25s linear;
 }
-.delete-button {
-  display: flex;
-  justify-content: center;
-}
+
 </style>

@@ -1,3 +1,4 @@
+<template>
 <form class="createPost">
   <textarea
   name="post"
@@ -11,16 +12,19 @@
   v-model="legend"
   v-on:input="sendPost"
   ></textarea>
-  <div class="custom-file">
-    <img src=""/>
-    <input type="file" accept="image/*" id="custom-file-input" v-on:change="sendFile($event)"/>
-   </div>
-  <button class="buttonPost" v-on:click="sendPost">Publier</button>
-</form>
+     
+<button type="button" class="button-gif">
+  <label for="custom-file-input">Fichiers</label>
+</button>
+<input type="file" id="custom-file-input" accept="image/*" v-on:change="sendFile($event)" />
 
+  <button class="buttonPost" v-on:click="sendPost">Publier</button>
+
+</form>
+</template>
 <script>
   export default {
-    name: "createPost"
+    name: "createPost",
     data: () => {
       return {
         legend: "",
@@ -50,7 +54,8 @@ form {
   align-items: center;
 }
 textarea {
- width: 700px;
+ width: 1000px;
+ height: 200px;
 }
 button {
   margin-top: 30px;
@@ -63,8 +68,19 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: all .25s linear;
+  background-color: #FFD7D7;
 }
 .createPost {
   margin-top : 100px;
 }
+
+#custom-file-input {
+  display: none;
+} 
+
+.button-gif {
+  display: block;
+  cursor: pointer;
+}
+
 </style>

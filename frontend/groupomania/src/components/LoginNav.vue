@@ -4,10 +4,10 @@
       <img class="image-logo" alt="Groupomania" src="../assets/icon-above-font.svg">
     </h1>
     <nav>  
-      <div class=navLink>
+     
         <router-link to="/">Se connecter</router-link> |
         <router-link to="/Signup">S'inscrire</router-link>
-      </div>
+ 
     </nav>
   </header>  
 </template>
@@ -18,11 +18,8 @@
   };
 </script>
 
-<style lang="css">
-
-.navLink {
-  margin-top: 50px;
-}
-
-
+<style>
+  img {
+    margin-top: 100px;
+  }
 </style>

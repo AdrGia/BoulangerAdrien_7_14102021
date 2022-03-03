@@ -1,26 +1,24 @@
 <template>
 	<div class="container">
 		<loginNav/>
-		<loginInfo validateText="Se Connecter" v-on:data-sent="updateData" 
+		<loginInfo  v-on:data-sent="updateData" 
 		v-on:requet-sent="login">
 			<template v-slot:messageError>{{ message }}</template>
 		</loginInfo>
+		<button class="button-login" type="submit" v-on:click="login">Se Connecter</button>
 	</div>
 
 </template>
 
 <script>
-
 import LoginNav from "@/components/LoginNav.vue";
 import LoginInfo from "@/components/LoginInfo.vue";
-
 export default {
 	name: "Login",
 	components: {
 		LoginNav,
 		LoginInfo,
 	},
-
 	data: () => {
 		return {
 		email: "",
@@ -29,12 +27,10 @@ export default {
 	};
 },
 methods : {
-
 	updateData(data) {
 		this.email = data.email;
 		this.password = data.password;
 	},
-
 	login() {
 		this.$axios
 		.post("user/login", this.data)
@@ -61,5 +57,4 @@ methods : {
 		document.tittle = "Se connecter"
 	}
 };	
-
 </script>
