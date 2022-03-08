@@ -4,20 +4,27 @@ const jwt = require('jsonwebtoken');
 const database = require('../connectDB.js');
 const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');
 
-exports.newuser = (req, res, next) => {
+exports.signup = (req, res, next) => {
+	/*return res.status(201).json({ message: 'Utilisateur créé !' });*/
+	
 	bcrypt.hash(req.body.password, 10)
     .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      });
+     const firstName = req.body.firstName;
+     const lastName = req.body.lastName;
+     const email = req.body.email;
+     const password = req.body.password;
+     const sql = "INSERT INTO User (firstname, lastname, email, password) VALUE (?, ?, ?, ?)";
+     const sqlParams = [firstname, lastname, email, password];
 
-      user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
-};	
+    	connection.execute(sql, sqlParams, (error, results, fields) => {
+     		if(error) {
+     			return res.status(500).json(error.message);
+     		}
+     		res.status(201).json({ message: "Utilisateur créé !" });
+     	});
+ 	})
+ 	.catch(error=> res.status(500).json(error));
+ };	
 
 exports.login = (req, res, next) => {
 
@@ -127,9 +134,9 @@ exports.profile = (req, res, next) => {
 	const sqlParams = [userId];
 	connection.execute(sql, slqParams, (error, results, fiedls) =>{
 		if (error) {
-			return.status(500).json({ "error": error.sqlMessage });
+			return res.status(500).json({ "error": error.sqlMessage });
 		} else {
-			res.statut(201).json(result);
+			return res.statut(201).json(result);
 		}
 	});
 };

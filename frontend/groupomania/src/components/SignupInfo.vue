@@ -1,21 +1,11 @@
 <template> 
-    <div class="container">
+    <div class="container">    
+            <label for="name">Entrez votre Prénom
+            <input type="text" id="firstName"  required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" v-model="lastName" placeholder="Prénom" v-on:input="sendData"/></label> 
         
-            <label for="name">Entrez votre Prénom</label>
-            <input type="text" id="firstName" maxlenght="30" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" v-on:input="sendData"/> 
-        
-            <label for="name">Entrez votre Nom</label>
-            <input type="text" id="lastName" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" maxlenght="30" v-on:input="sendData"/>
-
-            <label for="email">Entrez votre Adresse Mail</label>
-            <input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-on:input="sendData"/>
-  
-            <label for="password">Entrez votre Mot Passe</label>
-            <input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-on:input="sendData"/>
-
-    </div>
+            <label for="name">Entrez votre Nom
+            <input type="text" id="lastName" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" maxlenght="30" v-model="firstName" placeholder="Nom" v-on:input="sendData"/></label>
+    </div>      
 </template>
 
 
@@ -32,18 +22,15 @@ export default {
     sendData() {
      const firstNameValid = document.getElementById("firtName")
      const lastNameValid = document.getElementById("lastName")
-     const emailValid = document.getElementById("email")
-     const passwordValid = document.getElementById("password")
-     if(firstNameValid && lastNameValid && emailValid && passwordValid) {
+     if(firstNameValid && lastNameValid) {
       this.$emit("data-sent", this.$data);
       }
-    },  
-  },
-};  
+    },
+  },  
+};
 </script>
 
 <style lang="css">
-
 body {
   font-family: 'Poppins', sans-serif;
   align-items: center;
@@ -55,7 +42,6 @@ body {
   flex-flow: wrap;
   font-size: 1.2rem;
 }
-
 button {
   font-family: 'Poppins', sans-serif;
   min-width: 120px;
@@ -71,5 +57,9 @@ button {
 .buttonOn {
   display: flex;
   justify-content: center;
+}
+
+input {
+  text-align: center;
 }
 </style>
