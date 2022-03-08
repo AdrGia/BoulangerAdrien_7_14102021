@@ -1,13 +1,14 @@
 <template>
-  <div class="container">
-    <LoginNav />
-    <form onsubmit="return false">
-      <LoginInfo validateText="Se connecter" v-on:data-sent="updateData" v-on:request-sent="login">
-        <template v-slot:messageError>{{ message }}</template>
-      </LoginInfo>
-    </form>
-    <!-- Fin -->
-  </div>
+	<div class="container">
+		<loginNav/>
+		<form>
+			<loginInfo  v-on:data-sent="updateData" 
+			v-on:requet-sent="login">
+			<template v-slot:messageError>{{ message }}</template>
+			</loginInfo>
+		</form>
+	</div>
+
 </template>
 
 <script>
