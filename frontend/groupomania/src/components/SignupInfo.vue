@@ -1,66 +1,59 @@
 <template> 
     <div class="container">
+      <form @submit.prevent="sendRequest($event)">
           <div class="container-signupinfo" >        
-            <label for="name">Entrez votre Prénom
-            <input type="text" id="firstName" maxlenght="30" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" v-model="lastName" placeholder="Prénom"/></label> 
+            <label for="firstName">Entrez votre Prénom
+            <input type="text" id="firstName" required v-model="lastName" placeholder="Prénom"/></label> 
         
-            <label for="name">Entrez votre Nom
-            <input type="text" id="lastName" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}" maxlenght="30" v-model="firstName" placeholder="Nom"/></label>
+            <label for="lastName">Entrez votre Nom
+            <input type="text" id="lastName" required v-model="firstName" placeholder="Nom"/></label>
 
             <label for="email">Entrez votre Adresse Mail
-            <input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-model="email" placeholder="Adresse mail"/></label>
+            <input type="email" id="email" required v-model="email" placeholder="Adresse mail"/></label>
   
             <label for="password">Entrez votre Mot Passe
-            <input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-            maxlenght="120" v-model="password" placeholder="Mot de passe"/></label>
+            <input type="password" id="password" required
+            maxlenght="25" v-model="password" placeholder="Mot de passe"/></label>
           </div>
-          <button class="button-login" type="submit" @click="signup">S'inscrire</button>  
+          <button class="button-login" type="submit">S'inscrire</button>
+      </form>  
     </div>
 </template>
 
 
 <script>
 export default {
-    name:"SignupInfo",
-    data: () => {
-        return {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            message: null,
-        };
-    },
-   methods : { 
-    sendData() {
-     const firstNameValid = document.getElementById("firtName")
-     const lastNameValid = document.getElementById("lastName")
-     const emailValid = document.getElementById("email")
-     const passwordValid = document.getElementById("password")
-     if(firstNameValid && lastNameValid && emailValid && passwordValid) {
-      this.$emit("data-sent", this.$data);
-      }
-    },
-    signup() {
-      this.$axios
-      .post("user/signup", this.data)
-      .then(() => {
-        this.$axios.post('user/signup', this.data).then((data) =>{
-          sessionStorage.setItem('token', data.token);
-          this.$axios.defaults.headers.common["Authorization"];
-          this.$router.push('Feed');
-        })
-      })
-      .catch((error) => {
-        if(error.reponse.status === 500) {
-          this.message = "Erreur du serveur";
-        }
-        sessionStorage.removeItem('token');
-      });
-    },  
+  name: "SignupInfo",
+  data: () => {
+    return {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      
+    };
   },
-};  
+  methods: {
+    sendRequest(event) {
+      if(event) {
+        event.preventDefault();
+      }
+      const firstNameValid = document.getElementById("firstName")
+      const lastNameValid = document.getElementById("lastName")
+      const emailValid = document.getElementById("email")
+      const passwordValid = document.getElementById("password")
+      if (firstNameValid && lastNameValid && emailValid && passwordValid) {
+        this.$emit("sendRequest", {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password,
+         
+        });
+      }
+    }
+  },
+};
 </script>
 
 <style lang="css">
@@ -91,7 +84,6 @@ button {
   display: flex;
   justify-content: center;
 }
-
 input {
   text-align: center;
 }

@@ -4,7 +4,7 @@
 		name="comment"
 		class="comment"
 		cols="150"
-		rows="5"
+		rows="3"
 		required
 		placeholder="Créer un commentaire"
 		aria-label="Ecrire un commentaire"
@@ -48,7 +48,7 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: all .25s linear;
-  
+  background-color: #FFD7D7;
 }
 textarea {
  width: 700px;

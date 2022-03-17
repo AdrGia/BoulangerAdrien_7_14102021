@@ -1,14 +1,14 @@
 <template>
 	<div class="container">
-		
+		<form @submit.prevent="sendRequest($event)">
 			<label for="email">Entrez votre Adresse Mail</label>
-			<input type="email" id="email" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-			maxlenght="120" v-on:input="sendData"/>
+			<input type="email" id="email" required placeholder="Adresse mail" v-model="email"/>
 	
 			<label for="password">Entrez votre Mot Passe</label>
-			<input type="password" id="password" required pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
-			maxlenght="120" v-on:input="sendData"/>
-		<button class="button-login" type="submit" v-on:click="login">Se Connecter</button>	
+			<input type="password" id="password" required maxlenght="25" placeholder="Mot de passe" v-model="password"/>
+
+			<button class="button-login" type="submit">Se Connecter</button>
+		</form>
 	</div>
 </template>
 
@@ -22,15 +22,17 @@ export default {
 		};
 	},
 	methods: {
-		sendData() {
-			this.$emit("data-sent", this.$data);
-		},
-		sendRequest() {
+		
+		sendRequest(event) {
+			if(event) {
+				event.preventDefault();
+			}
 			const emailValid = document.getElementById("email").checkValidity();
 			const passwordValid = document.getElementById("password").checkValidity();
-			if(emailValid && passwordValid){
-				this.$emit("request-sent");
+			if(emailValid && passwordValid) {
+				this.$emit("sendRequest", {email: this.email, password: this.password});
 			}
+			
 		},
 	},
 };

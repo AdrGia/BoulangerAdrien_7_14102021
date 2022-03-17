@@ -10,7 +10,6 @@
   placeholder="Créer un post"
   aria-label="Ecrire un post"
   v-model="legend"
-  v-on:input="sendPost"
   ></textarea>
      
 <button type="button" class="button-gif">
@@ -47,8 +46,7 @@
   };
 </script>
 
-<style lang="css">
-form {
+<style lang="css">form {
   display: flex;
   flex-flow: column wrap;
   align-items: center;
@@ -82,5 +80,6 @@ button {
   display: block;
   cursor: pointer;
 }
+
 
 </style>

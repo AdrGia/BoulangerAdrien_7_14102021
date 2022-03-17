@@ -1,10 +1,10 @@
 
 <template>
-<div>
+<div class="container">
 	<Alert v-if="!connected" :alertType="alert.type" :alertMessage="alert.message"/>
 	<div v-else>
 		<FeedNav/>
-		<createPost v-on: post-sent="post"/>
+		<createPost v-on:post-sent="post"/>
 		<Alert v-if="alert.active && !alert.activeComment" :alertType="alert.type" :alertMessage="alert.messsage"/>
 		<Post
 			v-for="post in posts"

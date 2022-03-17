@@ -1,16 +1,18 @@
+
 <template>
+
 	<div class="container">
 			<loginNav/>
-			<form>
-				<signupInfo></signupInfo>
-			</form>
+			<signupInfo v-on:sendRequest="signup"></signupInfo>
 		</div>
+
 </template>
 
 <script>
 import LoginNav from "@/components/LoginNav.vue";
 import SignupInfo from "@/components/SignupInfo.vue";
 export default {
+
 	name: "Signup",
 	components: {
 		LoginNav,
@@ -27,16 +29,31 @@ export default {
 	},
 	
 	methods: {
-		udpateData(data) {
+		signup(data) {
 			this.firstName = data.firstName;
 			this.lastName = data.lastName;
 			this.email = data.email;
 			this.password = data.password;
+			this.$axios
+				.post('user/signup', this.data)
+				.then(() => {
+					this.$axios.post('user/signup', this.data).then((data) =>{
+						sessionStorage.setItem('token', (data?.token ?? null));
+						this.$router.push('Feed');
+					})
+				})
+				.catch((error) => {
+					if(error.response.status === 500) {
+						this.message = "Erreur du serveur";
+					}
+					sessionStorage.removeItem('token');
+				});
 		},
-		
 		mounted() {
 			document.title = "Création du compte";
 		},
+
 	},
+    
 };
 </script>

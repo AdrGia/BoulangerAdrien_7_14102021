@@ -1,5 +1,30 @@
 
-<template></template>
+<template>
+	<article class="comment-container">
+  <slot name="comment-delete"></slot>
+  <header>
+    <p class="profile-commment" role="link" >
+      <slot name="avatarUrl"></slot>
+      <slot name="firstName"></slot>
+      <slot name="lastName"></slot>
+    </p>
+  </header>
+  <div class="body-comment">
+    <p>
+      <slot name="comment-body"></slot>
+    </p>
+  </div>
+  <footer class="footer-comment">
+    <div class="like-comment">
+      <i class="fa-solid fa-thumbs-up" aria-hidden="true" role="button" :class="reactionUp" v-on:click="reactionUp"></i>
+    </div>
+    <div class="dislike-comment">
+      <i class="fa-solid fa-thumbs-down" aria-hidden="true" role="button" :class="reactionDown" v-on:click="rectionDown"></i>
+    </div>
+  </footer>
+</article>
+	
+</template>
 
 <script>
 	export default {

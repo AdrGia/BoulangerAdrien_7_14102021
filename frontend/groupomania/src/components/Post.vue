@@ -3,7 +3,6 @@
 	<article class="body-post" :id="idPost">
 		<slot name="postDelete"></slot>	
 		<header>
-			<h3>Commentaire de</h3>
 			<p class="profile-post" role="link" @click="goToProfile(idUser)">
 				<slot name="userAvtar"></slot>
 				<slot name="firstName"></slot>
