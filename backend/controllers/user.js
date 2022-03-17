@@ -5,38 +5,22 @@ const database = require('../connectDB.js');
 const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');
 
 exports.signup = (req, res, next) => {
-	/*return res.status(201).json({ message: 'Utilisateur créé !' });*/
-	
 	bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-     const firstName = req.body.firstName;
-     const lastName = req.body.lastName;
-     const email = req.body.email;
-     const password = req.body.password;
-     const sql = "INSERT INTO User (firstname, lastname, email, password) VALUE (?, ?, ?, ?)";
-     const sqlParams = [firstname, lastname, email, password];
+	.create({
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		email: req.body.email,
+		password: req.body.password
+	})
+	.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
+	.catch(error => res.status(500).json(error.message))
+ };
+	
 
-    	connection.execute(sql, sqlParams, (error, results, fields) => {
-     		if(error) {
-     			return res.status(500).json(error.message);
-     		}
-     		res.status(201).json({ message: "Utilisateur créé !" });
-     	});
- 	})
- 	.catch(error=> res.status(500).json(error));
- };	
+exports.login = async (req, res, next) => {
 
-exports.login = (req, res, next) => {
-
-	const connection = database.connect();
-
-	const email = req.body.email;
-	const password = req.body.password
-	const sql = "SELECT userId, firstname, lastname, email, password, avatarUrl, isAdmin FROM users WHERE email = ?";
-
-	connection.execute(sql, [email], (error, results, fields) =>{
-		if (error) {
-			return res.status(500).json(error.message);
+	if(error) {
+		return res.status(500).json(error.message);
 		} else if (results.length == 0) {
 			res.status(401).json({ error: 'Utilisateur non trouvé'});
 		}
@@ -48,14 +32,12 @@ exports.login = (req, res, next) => {
 				res.status(200).json({
 					token: jwt.sign(
 					{ userID: result[0].userID },
-					env.token,
+					process.env.KEY_TOKEN_PASSWORD,
 					{ expiresIn: "1d" }
 						)
 				});
 			}) 
 			.catch(error => res.status(500).json(error))
-	})
-	connection.end();
 };
 
 
