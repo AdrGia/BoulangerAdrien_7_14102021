@@ -1,61 +1,27 @@
 
 const database = require('../connectDB.js');
+const Notif = require('../models/notif.js');
 
-exports.getNotifs = (req, res, next) => {
-	
-	const connection = database.connect();
-	const userId = res.locals.userId;
-	const sql = "SELECT Notifications.id, Notifications.post_id AS postId, Users.name AS initiator, Notification_types.name AS type\
-              FROM `Notifications`\
-              INNER JOIN Users\
-                  ON Notifications.initiator_id = Users.id\
-              INNER JOIN Notification_types\
-                ON Notifications.type_id = Notification_types.id\
-              WHERE user_id = ?";
-    const sqlParams = [userId];
-    
-    connection.execute(sql, sqlParams, (error, notifications, fields) => {
-    	if (error) {
-    		res.status(500).json({ "error": error.sqlMessage });
-    	} else {
-    		res.status(200).json({ notifications });
-    	}
-    })          
-    connection.end();
-}
-
-exports.deleteOneNotif = (req, res, next) => {
-
-	const connection = database.connect();
-	const userId = res.locals.userId;
-	const notificationId = req.params.id;
-	const sql = "DELETE FROM Notifications WHERE id=?;";
-	const sqlParams = [notificationId];
-
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Notification supprimée"})
-		}
+exports.getNotif = (req, res, next) => {
+	Notif.findAll({ where: { userId: req.user.id}, order: [[ 'createAt', 'DESC' ]]})
+	.then(notif => {
+		res.status(200).json({ notif })
 	})
-	connection.end();
+	.catch(error => {
+		console.log(error)
+		res.status(400).json({ error })
+	})
 }
 
-exports.deleteAllNotifs = (req, res, next) => {
-	
-	const connection = database.connect();
-	const userId = res.locals.userId;
-	const slq = "DELETE FROM Notifications WHERE user_id=?;";
-	const sqlParams = [userId];
-
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if(error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Toutes les notifications ont été supprimées"});
+exports.deleteNotif = (req, res, next) => {
+	Notif.findOne({ where: { id: req.params.id, userId: req.user.id}})
+	.then(notif => {
+		if(!notif) {
+			res.status(400).json({error: error.message })
 		}
-	});
-
-	connection.end();
+		Notif.destroy()
+		.then(() => res.status(200).json({ message: 'Notification supprimée !'}))
+		.catch(error => res.status(400).json({ error }))
+	})
+	.catch(erro => res.status(500).json({ error: error.message}))
 }

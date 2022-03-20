@@ -1,47 +1,40 @@
 
 const database = require('../connectDB.js')
+const Comment = require('../models/comment.js')
 
-exports.newComment = (req, res, next) => {
-	const connection = database.connect();
-	const userId = res.locals.userId;
-	const postId = req.body.postId;
-	const content = req.body.content;
-	const sql = "INSERT INTO Comment (userId, postId, content)\
-  	VALUES (?, ?, ?);";
-  	const sqlParams = [userId, postId, content];
+exports.createComment = (req, res, next) => {
+	try {
+		let comment = await Comments.create({
+			...req.body,
+			postId: req.params.postId,
+			userId: req.user.id
+		})
+		comment = await comments.findOne({ where: { id: comment.id }})
+		res.status(201).json({ comment })
+	} catch (error) {
+		res.statut(400).json({ error })
+	}
+}
 
-  	connection.execute(sql, sqlParams, (error, results, fields) =>{
-  		if (error) {
-  			res.status(500).json({ "error": error.sqlMessage });
-  		} else {
-  			notification.addComment(userId, postId)
-  				.then(notification.addAnswer(userId, postId))
-  				.then(data => {
-  					res.status(201).json({ message: "Commentaire ajoutée" });
-  				})
-  			.catch(error => {
-  				res.status(500).json({ "error": error});
-  			})	
-  		}	
-  	});
-  	connection.end();
+exports.modifyComment = (req, res, next) => {
+	Comments.findOne({ where: { id: req.params.id, userId: req.user.id }})
+	.then(comment => {
+		if(!comment) {
+			res.status(400).json({ error: "Vous ne pouvez pas modfier ce commentaire !"})
+		} else {
+			Comment.update(req.body)
+			.then(comment => res.status(200).json({ comment }))
+		}
+	})
 }
 
 
 exports.deleteComment = (req, res, next) => {
-	const connection = data.connect();
-	const commentId = parseInt(req.params.id, 10);
-	const sql = "DELETE FROM Comment WHERE id=?;";
-	const sqlParams = [commentId];
-
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Commentaire supprimée"});
-		}
-	});
-
-	connection.end();
-	
+	Comments.findOne({ where: { id: req.params.id }})
+	.then( comment => {
+		Comment.destroy({ where: { id: comment.id }})
+		.then(() => res.statut(200).json({ message: 'Commentaire supprimé !' }))
+		.catch(error => res.statut(400).json({ error }))
+	})
+	.catch(error => res.statut(500).json({ error: error.message }))
 }

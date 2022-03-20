@@ -2,7 +2,7 @@ const { Model } = require('sequelize');
 const sequelize = new Model('sqlite::memory:');
 
 
-const user = sequelize.define('user', {
+const User = sequelize.define('user', {
 	firstName: {
 		type: DataTypes.STRING,
 		allowNull: false

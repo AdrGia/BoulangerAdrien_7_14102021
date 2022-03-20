@@ -2,7 +2,7 @@
 const { Sequelize } = require('@sequelize/core');
 const sequelize = new Sequelize('sqlite::memory:');
 
-const post = sequelize.define('post', {
+const Post = sequelize.define('post', {
 	dateCreation: {
 		type: DATE,
 		allowNull : false

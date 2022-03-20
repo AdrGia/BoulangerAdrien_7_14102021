@@ -2,11 +2,19 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const database = require('../connectDB.js');
+const User = require('../models/user');
 const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');
+
+const newToken = user => {
+	token = jwt.sign({ userId: result[0].userID}, process.env.KEY_TOKEN_PASSWORD, 
+		{ expiresIn: "1d" }
+		)
+	return { user, token }
+};
 
 exports.signup = (req, res, next) => {
 	bcrypt.hash(req.body.password, 10)
-	.create({
+	User.create({
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
 		email: req.body.email,
@@ -18,49 +26,39 @@ exports.signup = (req, res, next) => {
 	
 
 exports.login = async (req, res, next) => {
-
-	if(error) {
-		return res.status(500).json(error.message);
-		} else if (results.length == 0) {
-			res.status(401).json({ error: 'Utilisateur non trouvé'});
+	User.findOne({email: req.body.email})
+	.then(user => {
+		if(!user) {
+			return res.status(401).json({ error: 'Utilisateur incorrect !' });
 		}
-		bcrypt.compare(password, result[0].password)
+		bcrypt.compare(req.body.password, user.password)
 			.then(valid => {
-				if(!valid) {
-					return res.status(401).json({ error: "Mot passe incorrect !"});
+				if(!valid){
+					return res.status(401).json({ error: 'Mot de passe non valide !' });
 				}
-				res.status(200).json({
-					token: jwt.sign(
-					{ userID: result[0].userID },
-					process.env.KEY_TOKEN_PASSWORD,
-					{ expiresIn: "1d" }
-						)
-				});
-			}) 
-			.catch(error => res.status(500).json(error))
+				res.status(201).json(newToken(response.message));
+			})
+			.catch(error => res.status(500).json({ error }));
+	})
+	.catch(error => res.status(500).json({ error }));
+
 };
 
+exports.deleteAccount = async (req, res, next) => {
+	User.findOne({
+		where: { id: req.params.id}
+	})
+	.then(user => {
+		User.destroy({
+			where: { id: user.id}
+		})
+		.then(() => res.status(200).json({ message: "Mon compte supprimé !" }))
+		.catch(error => res.status(400).json({ error }))
+	})
+	.catch(error => res.status(500).json({ error }));
+};
 
-
-exports.deleteAccount = (req, res, next) => {
-
-	const connection = database.connect();
-	const password = req.body.password;
-	const userId = res.locals.userId;
-	const sql = "DELETE FROM User WHERE userId=?";
-	const sqlParams = [userId];
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage});
-		} else {
-			res.status(201).json({ message: "Utilisateur supprimé"});
-		}
-	});
-
-	connection.end();
-}
-
-exports.changeProfilePassword = (req, res, next) => {
+/*exports.changeProfilePassword = (req, res, next) => {
 
 	const connection = database.connect();
 	const searchId = req.params.id;
@@ -71,45 +69,29 @@ exports.changeProfilePassword = (req, res, next) => {
 			res.status(500).json({ "error": error.sqlMessage });
 		}
 	})
-}
+}*/
 
 exports.changeProfilePicture = (req, res, next) => {
 
-	const connection = database.connect();
-	const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-	const userId = req.params.id;
-	const sql = "UPDATE User SET avatarUrl=? WHERE userId=?";
-	const sqlParams = [avatarUrl, userId];
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if(error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Photo de profil modifiée" });
-		}
-	});
+	try {
+		 const userObject = req.file
+      ? {
+          ...JSON.parse(req.body.user),
+          avatarUrl: `${req.protocol}://${req.get('host')}/public/${
+            req.file.filename
+          }`
+        }
+      : { ...req.body }
 
-	connection.end();
-}
+      console.log(userObject)
+      req.user.update(userObject).then(user => res.status(200).json({ user }))
+	} catch (error) {
+		res.staut(400).json({ error })
+	}
+};
 
-exports.changeAdmin = (req, res, next) => {
 
-	const connection = database.connect();
-	const isadmin = req.body.isadmin;
-	const userId = req.params.id;
-	const sql = "UPDATE User SET isAdmin=? WHERE userId=?";
-	const sqlParams = [isadmin, userId];
-	connection.execute(sql, slqParams, (error, results, fields) =>{
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage});
-		} else {
-			res.status(201).json({ message: "Droits admistrateur modifiée"});
-		}
-	});
-	
-	connection.end();
-}
-
-exports.profile = (req, res, next) => {
+/*exports.profile = (req, res, next) => {
 	const connection = database.conenct();
 	const userId = req.paramas.id;
 	const sql = "SELECT firstName, lastName, email, avatarUrl, FROM User WHERE userId = ?";
@@ -121,4 +103,4 @@ exports.profile = (req, res, next) => {
 			return res.statut(201).json(result);
 		}
 	});
-};
+};*/

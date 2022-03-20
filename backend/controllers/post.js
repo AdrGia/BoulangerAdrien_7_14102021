@@ -1,104 +1,78 @@
 
 const database = require('../connectDB.js');
+const Post = require('../models/post.js');
 
-exports.newPost = (req, res, next) => {
-	const connection = database.connect();
-	
-	const imageurl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-  console.log(imageurl);
-  console.log(req.file.filename);
-	const content = req.body.content ? req.body.content : null;
-	const sql = "INSERT INTO Post (userId, imageUrl, content)\ VALUES (?, ?, ?);";
-	const sqlParams = [userId, imageurl, content];
-
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Publication ajoutée" });
-		}
-	})
-
-	connection.end();
+exports.createPost = async (req, res, next) => {
+	let postObject = req.body
+  if(req.file) {
+    postObject = JSON.parse(req.body.post)
+    postObject.imageUrl = `${req.protocol}://${req.get('host')}/public/${
+      req.file.filename
+    }`
+  }
+  try {
+    let post = await Post.create({
+      ...postObject, userId: req.user.id
+    })
+    post = await Post.findOne({ where: { id: post.id} })
+    res.status(201).json({ post })
+  }
+  catch(error) {
+    console.log(error)
+    res.status(400).json({ error})
+  }
 }
 
-exports.allPosts = (req, res, next) => {
-	const connection = database.connect();
-	const sql = "SELECT Post.postId AS postId, Post.dateCreation AS postDate, Post.imageUrl AS postImage, Post.content AS postContent, User.userId AS userId, User.firstname AS userFirstName, User.lastname AS userLastName, User.avatarUrl AS userPicture\
-  FROM Post\
-  INNER JOIN User ON Post.userId = User.userId\
-  ORDER BY postDate DESC";
-  	connection.execute(sql, (error, rawPosts, fields) => {
-  		if(error) {
-  			connection.end();
-  			res.status(500).json({ "error": error.sqlMessage });
-  		} else {
-  			this.getCommentsOfEachPosts(rawPosts, connection)
-  				.then(postsWithoutLikes => {
-  					const userId = res.locals.userId;
-  					this.getLikesOfEachPosts(postsWithoutLikes, userId, connection)
-  						.then( posts => {
-  							res.status(200).json({ posts });
-  						})
-  					.catch(error =>{
-  						res.status(500).json({ "error": "Un problème est survenu" })
-  					})	
-  				})
-  		}
-  	});
-
-
+exports.getAllPosts = (req, res, next) => {
+  Post.findAll ()
+  .then(posts => {
+    if(posts.length > null) {
+      res.status(200).json(posts)
+    } else {
+      res.status(401).json({ error: 'Pas de posts afficher '})
+    }
+  })
+  .catch(error => res.status(500).json(error))
 
 }
 
-exports.onePost = (req, res, next) => {
-	const connection = database.connect();
-	const postId = parseInt(req.params.id);
-	const sql = "SELECT Post.postId AS postId, Post.dateCreation AS postDate, Post.imageUrl AS postImage, Post.content AS postContent, User.userId AS userId, User.firstname AS userFirstName, User.lastname AS userLastName, User.avatarUrl AS userPicture\
-  FROM Post\
-  INNER JOIN User ON Post.userId = User.userId\
-  WHERE Post.postId = ?\
-  ORDER BY postDate DESC";
-  	const sqlParams = [postId];
+exports.getOnePost = (req, res, next) => {
+  Post.findOne({ where: { id: req.params.id } })
+  .then(post => res.status(200).json({ post }))
+  .catch(error => res.status(400).json({ error }))
 
-  	connection.execute(sql, sqlParams, (error, rawPosts, fields) => {
-  		if (error) {
-  			connection.end();
-  			res.status(500).json({ "error": error.sqlMessage});
-  		} else {
-  			this.getCommentsOfEachPosts(rawPosts, connection)
-  			.then(postsWithoutLikes => {
-  				const userId = res.locals.userId;
-  				this.getLikesOfEachPosts(postsWithoutLikes, userId, connection)
-  					.then(posts => {
-  						res.status(200).json({ post });
-  					})
-  			})
-  		}
-  		
-  	});
+}
 
-
+exports.modifyPost = (req, res, next) => {
+  const postObject = req.file
+  ? {
+    ...JSON.parse(req.body.post),
+    imageUrl:  `${req.protocol}://${req.get('host')}/public/${ req.file.filename }`
+  }
+  : { ...req.body}
+  Post.findOne({ where: {id: req.params.id, userId: req.user.id } })
+  .then(post => {
+    if(!post) {
+      res.status(400).json({ error: "Vous n'avez pas l'autorisation" })
+    } else {
+      post.udapte(postObject).then(post => res.status(200).json({ post }))
+    }
+  })
 }
 
 exports.deletePost = (req, res, next) => {
-	const connection = database.connect();
-	const postId = parseInt(req.params.id, 10);
-	const sql = "DELETE FROM Post WHERE id=?;";
-	const sqlParams = [postId];
-
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if (error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			res.status(201).json({ message: "Publication supprimée"});
-		}
-	})
-
-	connection.end();
+	Post.findOne({ where: { id: req.params.id }
+  })
+  .then(post => {
+    Post.destroy({ where: { id: post.id }
+    })
+    .then(() => res.status(200).json({ message: 'Publication supprimée !' }))
+    .catch(error => res.status(400).json({ error }))
+  })
+  .catch(error => res.status(500).json({ error: error.message }))
 }
 
-exports.getCommentsOfEachPosts = (posts, connection) => {
+/*exports.getCommentsOfEachPosts = (posts, connection) => {
 	return Promise.all(posts.map( post => {
 	const sql = "SELECT Comment.commentId AS commentId, Comment.dateCreation AS commentDate, Comment.content As commentContent, Users.userId AS userId, User.FirstName AS firstName, User.LastName AS latName User.avatarUrl AS userPicture\
                 FROM Comment\
@@ -116,24 +90,4 @@ exports.getCommentsOfEachPosts = (posts, connection) => {
     	})  
 
 	}));
-}
-
-exports.getLikesOfEachPosts = (posts, userId, connection) => {
-	return Promise.all(posts.map(post => {
-		const postId = post.postId;
-		const sql = "SELECT\
-                (SELECT COUNT(*) FROM Likes WHERE (post_id=? AND rate=1)) AS LikesNumber,\
-                (SELECT COUNT(*) FROM Likes WHERE (post_id=? AND rate=-1)) AS DislikesNumber,\
-                (SELECT rate FROM Likes WHERE (post_id=? AND user_id=?)) AS currentUserReaction";
-        const sqlParams = [postId, postId, postId, userId];
-        return new Promise ((resolve, reject) => {
-        	connection.execute(sql, sqlParams, (error, result, fields) => {
-        		if (error) {
-        			reject(error);
-        		} else {
-        			resolve({ ...post, likes : result[0] });
-        		}
-        	});
-        })        
-	}));
-}	
+}*/
