@@ -1,27 +1,27 @@
 <template>
-<form class="createPost">
-  <textarea
-  name="post"
-  class="post"
-  cols="80"
-  rows="5"
-  maxlength="180"
-  required
-  placeholder="Créer un post"
-  aria-label="Ecrire un post"
-  v-model="legend"
-  v-on:input="sendPost"
-  ></textarea>
+  <form name="formPost" class="createPost" @submit.prevent="sendRequest($event)">
+    <textarea
+      name="post"
+      class="post"
+      cols="80"
+      rows="5"
+      maxlength="180"
+      required
+      placeholder="Créer un post"
+      aria-label="Ecrire un post"
+      v-model="legend"
+    ></textarea>
      
-<button type="button" class="button-gif">
-  <label for="custom-file-input">Fichiers</label>
-</button>
-<input type="file" id="custom-file-input" accept="image/*" v-on:change="sendFile($event)" />
+    <button type="button" class="button-gif">
+    <label for="custom-file-input">Fichiers</label>
+    </button>
+    <input type="file" id="custom-file-input" accept="image/*" v-on:change="sendFile($event)" />
 
-  <button class="buttonPost" v-on:click="sendPost">Publier</button>
+    <button class="buttonPost">Publier</button>
 
-</form>
+  </form>
 </template>
+
 <script>
   export default {
     name: "createPost",
@@ -32,8 +32,11 @@
       };
     },
     methods: {
-      sendPost() {
-        const formValid = document.getElementByName("createPost")[0].checkValidity();
+      sendRequest(event) {
+        if(event) {
+          event.preventDefault();
+        }
+        const formValid = document.getElementByName("formPost")[0].checkValidity();
         if(formValid) {
           this.$emit("post-sent", this.$data);
           document.getElementByName("legend")[0].value = null;
@@ -54,7 +57,6 @@ form {
   align-items: center;
 }
 textarea {
- width: 1000px;
  height: 200px;
 }
 button {

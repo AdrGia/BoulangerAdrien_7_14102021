@@ -1,12 +1,13 @@
 
 <template>
-<div>
-	<Alert v-if="!connected" :alertType="alert.type" :alertMessage="alert.message"/>
-	<div v-else>
-		<FeedNav/>
-		<createPost v-on: post-sent="post"/>
-		<Alert v-if="alert.active && !alert.activeComment" :alertType="alert.type" :alertMessage="alert.messsage"/>
-		<Post
+	<div>
+		<Alert v-if="!connected" :alertType="alert.type" :alertMessage="alert.message"/>
+		<div v-else>
+			<FeedNav/>
+			<createPost v-on: post-sent="post"/>
+			<Alert v-if="alert.active && !alert.activeComment" :alertType="alert.type" :alertMessage="alert.messsage"/>
+
+			<Post
 			v-for="post in posts"
 			:key="post.postID"
 			:idPost="post.postID"
@@ -16,30 +17,43 @@
 			v-on:reaction-up="sendReaction(post.postID, 1)"
 			v-on:reaction-none="sendReaction(post.postID, 0)"
 			:reaction="post.yourReaction"
-		>
-			<template v-slot:postDelete v-if="userRole == 'admin'">
-				<i class="fas fa-times" aria-hidden="true" title="Supprimer le post" role="button" v-on:click="deletePost(post.postID)"></i>
-				<span>Supprimer le post</span>
-			</template>
-			<template v-slot:postDelete v-else-if="post.yourPost > 0">
-				<i class="fas fa-times" aria-hidden="true" title="Supprimer le post" role="button" v-on:click="deletePost(post.postID)"></i>
-				<span>Supprimer le post</span>
-			</template>
-			<template v-slot:userName>{{ post.firstName + '' + post.lastName }}</template>
-			<template v-slot:postLegend>{{ post.legend }}</template>
-			<template v-slot:createComment>
-				<createComment
-				v-on:comment-sent="udapteBody"
-				v-if="commentInputShow && commentID === post.postID">
-				<button class="button-create" type="submit" v-on:click.prevent="postComment(post.postID)">Publier</button>	
-				</createComment>
-				<Alert v-if="alert.active && alert.activeComment && (commentID === post.postID)" :alertType="alert.type" :alertMessage="alert.message" />
-			</template>
-			<template v-slot:postUp>{{ post.countUp }}</template>
-			<template v-slot:postDown>{{ post.countDown }}</template>
-		</Post>	
-	</div>		
-</div>
+			>
+				<template v-slot:postDelete v-if="userRole == 'admin'">
+					<i class="fas fa-times" aria-hidden="true" title="Supprimer le post" role="button" v-on:click="deletePost(post.postID)"></i>
+					<span>Supprimer le post</span>
+				</template>
+
+				<template v-slot:postDelete v-else-if="post.yourPost > 0">
+					<i class="fas fa-times" aria-hidden="true" title="Supprimer le post" role="button" v-on:click="deletePost(post.postID)"></i>
+					<span>Supprimer le post</span>
+				</template>
+				
+				<template 
+				v-slot:postImage 
+				v-if="post.gifUrl.includes('.gif') || 
+				post.gifUrl.includes('.jpg') ||
+				post.gifUrl.includes('.jpeg') ">
+					<img src="post.gifUrl" alt="Image du post">	
+				</template>
+
+				<template v-slot:userName>{{ post.firstName + '' + post.lastName }}</template>
+				<template v-slot:postLegend>{{ post.legend }}</template>
+
+				<template v-slot:createComment>
+					<createComment
+					v-on:comment-sent="udapteBody"
+					v-if="commentInputShow && commentID === post.postID">
+						<button class="button-create" type="submit" v-on:click.prevent="postComment(post.postID)">Publier</button>	
+					</createComment>
+					<Alert v-if="alert.active && alert.activeComment && (commentID === post.postID)" :alertType="alert.type" :alertMessage="alert.message" />
+				</template>
+
+				<template v-slot:postUp>{{ post.countUp }}</template>
+				<template v-slot:postDown>{{ post.countDown }}</template>
+
+			</Post>	
+		</div>		
+	</div>
 </template>
 
 <script>
@@ -48,6 +62,7 @@
 	import Post from "@/components/Post.vue";
 	import createPost from "@/components/createPost.vue";
 	import createComment from "@/components/createComment.vue"
+
 	
 
 	export default {
@@ -58,6 +73,7 @@
 			Alert,
 			createPost,
 			createComment,
+			
 		},
 		data: () => {
 			return {
@@ -80,6 +96,18 @@
 				this.connected = false;
 				dataAlert.type = type;
 				dataAlert.message = message;
+			},
+			alertActive(type, message) {
+				const dataAlert = this.$data.alert;
+				dataAlert.active = true;
+				dataAlert.type = type;
+				dataAlert.message = message;
+				setTimeout(function() {
+					dataAlert.active = false;
+					dataAlert.activeComment = false;
+					dataAlert.type = "";
+					dataAlert.message = "";
+				}, 4000);
 			},
 			getPost() {
 				this.$axios
@@ -162,3 +190,5 @@
 		},
 	};
 </script>
+
+<style></style>

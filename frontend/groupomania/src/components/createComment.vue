@@ -1,5 +1,5 @@
 <template>
-	<form name="createComment">
+	<form name="formComment" @submit.prevent="sendRequest($event)">
 		<textarea
 		name="comment"
 		class="comment"
@@ -9,9 +9,9 @@
 		placeholder="Créer un commentaire"
 		aria-label="Ecrire un commentaire"
 		v-model="body"
-		v-on:input="sendComment"
+		
 		></textarea>
-		<button class="buttonComment" v-on:click="sendComment">Commenter</button>
+		<button class="buttonComment">Commenter</button>
 </form>
 </template>
 
@@ -24,7 +24,10 @@
 			};
 		},
 		methods: {
-			sendComment() {
+			sendRequest(event) {
+				if(event) {
+					event.preventDefault();
+				}
 				this.$emit("comment-sent", this.$data);
 			},
 		},

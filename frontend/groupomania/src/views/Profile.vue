@@ -125,7 +125,6 @@
 <style lang="css">
 
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
@@ -138,6 +137,7 @@ section {
   justify-content: center;
   margin-top: 200px;
   
+
 }
 .container-profil {
   flex-flow: wrap;
@@ -202,8 +202,8 @@ input {
   display: none;
 }
 img {
-  max-width: 100%;
-  display: block; 
+  width: 30%;
+  border-radius: 50%;
 }
 
 .image-button {
@@ -211,7 +211,6 @@ img {
   background-color: #FFD7D7;
   min-width: 120px;
   padding: .5rem;
-  margin-top : 10px;
   border: 1px solid #222;
   border-radius: 5px;
   font-weight: bold;

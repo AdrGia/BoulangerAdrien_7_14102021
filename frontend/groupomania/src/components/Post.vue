@@ -1,11 +1,12 @@
 
 <template>
+
 	<article class="body-post" :id="idPost">
 		<slot name="postDelete"></slot>	
-		<header>
-			<h3>Commentaire de</h3>
+		<header class="header-column">
 			<p class="profile-post" role="link" @click="goToProfile(idUser)">
-				<slot name="userAvtar"></slot>
+				<slot name="userAvatar" class="userAvatar">
+				</slot>
 				<slot name="firstName"></slot>
 				<slot name="lastName"></slot>
 			</p>
@@ -14,6 +15,9 @@
 			<p>
 				<slot name="postLegend"></slot>
 			</p>
+			<div class="image-post" role="link" @click="goToFeed(idPost)">
+				<slot name="postImage"></slot>
+			</div>
 		</div>
 		<footer class="footer-row">
 			<div class="like">
@@ -33,6 +37,7 @@
 <script>
 	export default {
 		name: "Post",
+		props: ["idUser"],
 		data: () => {
 			return {
 				reactionUp: "",
@@ -95,7 +100,7 @@ article {
   box-shadow: inset 0 -3em 3em rgba(0,0,0,0.1), 0 0  0 2px rgb(255,255,255), 0.3em 0.3em 1em rgba(0,0,0,0.3);
   line-height: 1.3em;
   border: 2px solid #FFD7D7;
-  padding-left: 10px;
+  padding-left: 5px;
   border-radius: 15px;
 } 
 .footer-row {
@@ -108,4 +113,11 @@ i {
   cursor: pointer;
   font-size: 1.3em;
 }
+
+.userAvatar {
+  width: 30%;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+
 </style>

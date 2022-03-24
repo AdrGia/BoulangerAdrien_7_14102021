@@ -1,12 +1,8 @@
 <template>
 	<div class="container">
 		<loginNav/>
-		<form>
-			<loginInfo  v-on:data-sent="updateData" 
-			v-on:requet-sent="login">
-			<template v-slot:messageError>{{ message }}</template>
-			</loginInfo>
-		</form>
+			<loginInfo  v-on:sendRequest="login"></loginInfo>
+			<p v-if="message">{{ message }}</p>
 	</div>
 
 </template>
@@ -28,25 +24,22 @@ export default {
 	};
 },
 methods : {
-	updateData(data) {
-		this.email = data.email;
-		this.password = data.password;
-	},
-	login() {
+	login(data) {
+    this.email = data.email;
+    this.password = data.password;
+
 		this.$axios
 		.post("user/login", this.data)
 		.then((data) => {
-			sessionStorage.setItem("token", data.token);
-			this.$axios.defaults.headers.common["Authorization"] =
-			"Bearer" + data.data.token;
+      sessionStorage.setItem('token', (data?.token ?? null));
 			this.router.push('Feed');
 		})
 		.catch((error)=> {
 			if(error.response.status === 401) {
-				this.message = "Email ou mot de passe invalide";
+				this.message = error.response.message;
 			}
 			if(error.response.status === 500) {
-				this.message = "Erreur serveur";
+				this.message = error.response.message;
 			}
 			sessionStorage.removeItem("token");
 			});

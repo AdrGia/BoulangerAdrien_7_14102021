@@ -3,14 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const database = require('../connectDB.js');
 const User = require('../models/user');
-const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');
-
-const newToken = user => {
-	token = jwt.sign({ userId: result[0].userID}, process.env.KEY_TOKEN_PASSWORD, 
-		{ expiresIn: "1d" }
-		)
-	return { user, token }
-};
+const getUser = require('../utils/jwtUtils');
+/*const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');*/
 
 exports.signup = (req, res, next) => {
 	bcrypt.hash(req.body.password, 10)
@@ -20,8 +14,8 @@ exports.signup = (req, res, next) => {
 		email: req.body.email,
 		password: req.body.password
 	})
-	.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
-	.catch(error => res.status(500).json(error.message))
+		.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
+		.catch(error => res.status(500).json(error.message))
  };
 	
 
@@ -44,13 +38,23 @@ exports.login = async (req, res, next) => {
 
 };
 
+exports.userProfil = (req, res, next) => {
+	let id = utils.getUser(req.headers.authorization)
+	User.findOne({
+		attributes: ['id', 'firstName', 'lastName', 'email'],
+		where: {id: id }
+	})
+	.then(user => res.status(200).json(user))
+	.catch(error => res.status(500).json(error))
+}
+
 exports.deleteAccount = async (req, res, next) => {
 	User.findOne({
-		where: { id: req.params.id}
+		where: { id: req.params.id }
 	})
 	.then(user => {
 		User.destroy({
-			where: { id: user.id}
+			where: { id: user.id }
 		})
 		.then(() => res.status(200).json({ message: "Mon compte supprimé !" }))
 		.catch(error => res.status(400).json({ error }))
@@ -58,20 +62,31 @@ exports.deleteAccount = async (req, res, next) => {
 	.catch(error => res.status(500).json({ error }));
 };
 
-/*exports.changeProfilePassword = (req, res, next) => {
-
-	const connection = database.connect();
-	const searchId = req.params.id;
-	const sql = "SELECT password FROM Users WHERE id=?";
-	const sqlParams = [searchId];
-	connection.execute(sql, sqlParams, (error, results, fields) => {
-		if(error) {
-			res.status(500).json({ "error": error.sqlMessage });
-		}
+exports.modifyPwd = (req, res, next) => {
+	let userId = utils.getUser(req.headers.authorization);
+	const newPassword = req.body.newPassword;
+	console.log(newPassword)
+	User.findOne({
+		where: { id: userId }
 	})
-}*/
+		.then(user => {
+			console.log(user)
+			bcrypt.compare(newPassword, user.password, (resComparePassword) => {
+				if(resComparePassword) {
+					res.status(406).json({ error: "Vous avez entré le même mot de passe" })
+				} else {
+					bcrypt.hash(newPassword, 10, function (err, bcryptNewPassword) {
+						User.update( { password: bcryptNewPassword }, { where: { id: user.id }} )
+						.then(() => res.status(201).json({ confirmation: "Mot de passe modifié !" }))
+						.catch(error => res.status(500).json(error))
+					})
+				}
+			})
+		})
+		.catch(error => res.status(406).json(error))
+};
 
-exports.changeProfilePicture = (req, res, next) => {
+exports.modifyAvtar = (req, res, next) => {
 
 	try {
 		 const userObject = req.file
@@ -88,19 +103,7 @@ exports.changeProfilePicture = (req, res, next) => {
 	} catch (error) {
 		res.staut(400).json({ error })
 	}
+
 };
 
 
-/*exports.profile = (req, res, next) => {
-	const connection = database.conenct();
-	const userId = req.paramas.id;
-	const sql = "SELECT firstName, lastName, email, avatarUrl, FROM User WHERE userId = ?";
-	const sqlParams = [userId];
-	connection.execute(sql, slqParams, (error, results, fiedls) =>{
-		if (error) {
-			return res.status(500).json({ "error": error.sqlMessage });
-		} else {
-			return res.statut(201).json(result);
-		}
-	});
-};*/
