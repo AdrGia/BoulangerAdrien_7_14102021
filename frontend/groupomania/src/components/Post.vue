@@ -1,99 +1,117 @@
 
 <template>
-
-	<article class="body-post" :id="idPost">
-		<slot name="postDelete"></slot>	
-		<header class="header-column">
-			<p class="profile-post" role="link" @click="goToProfile(idUser)">
-				<slot name="userAvatar" class="userAvatar">
-				</slot>
-				<slot name="firstName"></slot>
-				<slot name="lastName"></slot>
-			</p>
+	<section class="block-post" :id="post.id">
+    	<div class="before-header">
+   			<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="modifyPost"></i>
+			<i class="fas fa-times" role="button" title="Supprimer le post" v-on:click="deletePost"></i>
+    	</div> 
+		<header>
+			<img alt="Avatar" :src="post.image"/>
+			<span> {{ post.firstName }} {{ post.lastName }} </span>
+      		<h3>{{ post.title }}</h3>
 		</header>
-		<div class="post-body">
-			<p>
-				<slot name="postLegend"></slot>
-			</p>
-			<div class="image-post" role="link" @click="goToFeed(idPost)">
-				<slot name="postImage"></slot>
-			</div>
-		</div>
+		<article>
+			<p class="body-post">{{ post.body }}</p>
+		</article>
 		<footer class="footer-row">
-			<div class="like">
-				<i class="fa-solid fa-thumbs-up" aria-hidden="true" role="button" :class="reactionUp" v-on:click="reactionUp"></i>
-			</div>
-			<div class="dislike">
-				<i class="fa-solid fa-thumbs-down" aria-hidden="true" role="button" :class="reactionDown" v-on:click="rectionDown"></i>
-			</div>
-			<div class="i-comment">
-				<i class="fas fa-comments" aria-hidden="true" role="button" v-on:click="displayCommentInput"></i> 
-			</div>
+			<Social :social="post.social"/>
 		</footer>
-	</article>
-
+	</section>
 </template>
 
 <script>
+	import Social from './Social.vue';
+	import createComment from './createComment.vue';
+	import Comment from './Comment.vue';
+
 	export default {
-		name: "Post",
-		props: ["idUser"],
-		data: () => {
-			return {
-				reactionUp: "",
-				reactionDown: "",
-				cursor: "pointer",
-			};
+		name: 'Post',
+		props: ['post'],
+		components: {
+			Social,
+			createComment,
+			Comment,
 		},
 		methods: {
-			displayCommentInput() {
-				this.$emit("comment-input");
+			getUserRole() {
+				this.$axios
+				.get("user/role")
+				.then((data) => {
+					this.userRole = data.data[0].role;
+				})
+				.catch((e) => {
+					if(e.reponse.status === 401) {
+						this.alertConstant("Veuillez vous connecter");
+					}
+					if(e.reponse.status === 400) {
+						this.alertConstant("Utilisateur non trouvé");
+					}
+					if(e.reponse.status === 500) {
+						this.alertConstant("Erreur serveur");
+					}
+				});
 			},
-			sendReactionUp() {
-				if(this.reaction === 1) {
-					this.$emit("reaction-none");
-				}
-				this.$emit("reaction-up");
+			get() {
+				this.$axios
+				.get("post")
+				.then((data) => {
+					this.posts = data.data;
+				})
+				.catch((e) => {
+					if(e.response.status === 401) {
+						this.alertConstant("Veuillez vous connecter")
+					}
+				});
 			},
-			sendReactionDown() {
-				if(this.reaction === -1) {
-					this.$emit("reaction-none");
-				}
-				this.$emit("reaction-down")
+			post(data) {
+				const formData = new formData();
+				formData.append("image", data.post.image);
+				formData.append("body", data.post.body);
+				this.$axios
+				.post("post", formData)
+				.then(() => {
+					this.get();
+					this.alertActive('Post publié !');
+				})
+				.catch((e) => console.log(e));
 			},
-			updateReaction() {
-				if (this.reaction === 1) {
-					this.reactionUp = "reactionActive";
-					this.reactionDown = "reactionNone";
-				}
-				else if (this.reaction === -1) {
-					this.reactionUp = "reactionNone";
-					this.reactionDown = "reactionActive";
-				}
-				else {
-					this.reactionUp = "reactionNone";
-					this.reactionDown = "reactionNone";
-				}
-			},
+			modifyPost(postId) {
+				this.$axios
+				.update("post/" + postId)
+				.then(() => {
+					this.alertActive("Post modifié !")
+				})
+				.catch((e) => console.log(e));
 
-		},
-		mounted() {
-			this.updateReaction();
-			if(this.$route.name === "Feed") {
-				this.cursor = "pointer";
-			} else {
-				this.cursor = "default";
+			},
+			deletePost(postId) {
+				this.$axios
+				.delete("post/" + postId)
+				.then(() => {
+					this.alertActive("Post supprimé !");
+				})
+				.catch((e) => console.log(e));
+			},
+			postComment(postId) {
+				const formValid = document.getElementByName('formComment')[0].checkValidity();
+				if(formValid) {
+					this.axios
+					.post(`post/${postID}/comment`, { body: this.body })
+					.then(() => {
+						this.alertActive('Commentaire Publié');
+					})
+					.catch((e) => {
+						console.log(e);
+					})
+				}
 			}
-		},
-		updated() {
-			this.updateReaction();
-		},
-
+		}
 	};
+
 </script>
 
 <style>
-article {
+section {
   width: 25em;
   background-color: #FFD7D7;
   border-radius: .3em;
@@ -112,12 +130,34 @@ i {
   color: white;
   cursor: pointer;
   font-size: 1.3em;
+  padding-left: 5px;
 }
 
-.userAvatar {
+img {
   width: 30%;
   border: 1px solid black;
   border-radius: 50%;
+}
+
+.before-header {
+  display: flex;
+  justify-content: right;
+  padding-top: 5px;
+  padding-right: 10px;
+}
+button {
+  font-family: 'Poppins', sans-serif;
+  border: 1px solid #222;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all .25s linear;
+}
+.body-post {
+  padding-top: 30px;
+}
+h3 {
+  padding-top: 15px;
 }
 
 </style>

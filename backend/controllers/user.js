@@ -42,7 +42,7 @@ exports.userProfil = (req, res, next) => {
 	let id = utils.getUser(req.headers.authorization)
 	User.findOne({
 		attributes: ['id', 'firstName', 'lastName', 'email'],
-		where: {id: id }
+		where: { id: id }
 	})
 	.then(user => res.status(200).json(user))
 	.catch(error => res.status(500).json(error))
