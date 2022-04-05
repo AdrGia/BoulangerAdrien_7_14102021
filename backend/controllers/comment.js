@@ -4,12 +4,12 @@ const Comment = require('../models/comment.js')
 
 exports.createComment = (req, res, next) => {
 	try {
-		let comment = await Comments.create({
+		let comment =  Comments.create({
 			...req.body,
 			postId: req.params.postId,
 			userId: req.user.id
 		})
-		comment = await comments.findOne({ where: { id: comment.id }})
+		comment = Comments.findOne({ where: { id: comment.id }})
 		res.status(201).json({ comment })
 	} catch (error) {
 		res.statut(400).json({ error })

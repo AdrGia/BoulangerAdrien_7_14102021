@@ -1,24 +1,24 @@
 
-const { Sequelize } = require('@sequelize/core');
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = require('../connectDB');
+const DataTypes = require('sequelize/lib/data-types');
 
 const Post = sequelize.define('post', {
 	dateCreation: {
-		type: DATE,
+		type: DataTypes.DATE,
 		allowNull : false
-	};
+	},
 	userId: {
-		type: STRING,
+		type: DataTypes.STRING,
 		allowNull: false
-	};
+	},
 	imageUrl: {
-		type: STRING,
+		type: DataTypes.STRING,
 		allowNull: false
-	};
+	},
 	content: {
-		type: TEXT,
+		type: DataTypes.TEXT,
 		allowNull: false
-	};
+	},
 });
 
-console.log(post === sequelize.models.post);
+module.exports = Post;

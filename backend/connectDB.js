@@ -11,13 +11,6 @@ const sequelize = new Sequelize("DB_KEYDATABASE", "DB_USERCONNECT", "DB_PASSWORD
 	host: "DB_HOST",
 });
 
-let connectDB = async() => {
-	try {
-  		await sequelize.authenticate();
-  		console.log('Connection has been established successfully.');
-	} catch (error) {
-  		console.error('Unable to connect to the database:', error);
-	}
-}
 
-module.exports = connectDB;
+
+module.exports = sequelize;

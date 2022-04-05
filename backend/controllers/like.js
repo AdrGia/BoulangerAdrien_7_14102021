@@ -19,3 +19,25 @@ exports.likeOnePost = async (req, res, next) => {
 		res.status(400).json({ error })
 	}
 }
+
+exports.getLikeOnOnePost = async(req, res, next) => {
+	try {
+		const existingLike = await Likes.findOne({
+			where: { userId: req.user.id, postId: req.params.postId }
+		})
+		res.status(200).json({ like: existingLike ? true : false })	
+	} catch (error) {
+		res.status(400).json({ error })
+	}
+}
+
+exports.getAllLikesOfOnePost = async(req, res, next) => {
+	try {
+		const allLikes = await Likes.findAll({
+			where: { postId: req.params.postId } 
+		})
+		res.status(200).json({ allLikes })
+	} catch (error) {
+		res.status(400).json({ error })
+	}
+}

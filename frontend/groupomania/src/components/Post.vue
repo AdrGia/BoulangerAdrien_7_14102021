@@ -1,14 +1,14 @@
 
 <template>
 	<section class="block-post" :id="post.id">
-    	<div class="before-header">
-   			<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="modifyPost"></i>
+		<div class="before-header">
+			<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="updatePost"></i>
 			<i class="fas fa-times" role="button" title="Supprimer le post" v-on:click="deletePost"></i>
-    	</div> 
+		</div> 
 		<header>
 			<img alt="Avatar" :src="post.image"/>
 			<span> {{ post.firstName }} {{ post.lastName }} </span>
-      		<h3>{{ post.title }}</h3>
+			<h3>{{ post.title }}</h3>
 		</header>
 		<article>
 			<p class="body-post">{{ post.body }}</p>
@@ -75,7 +75,7 @@
 				})
 				.catch((e) => console.log(e));
 			},
-			modifyPost(postId) {
+			updatePost(postId) {
 				this.$axios
 				.update("post/" + postId)
 				.then(() => {
@@ -92,7 +92,7 @@
 				})
 				.catch((e) => console.log(e));
 			},
-			postComment(postId) {
+			/*postComment(postId) {
 				const formValid = document.getElementByName('formComment')[0].checkValidity();
 				if(formValid) {
 					this.axios
@@ -104,7 +104,7 @@
 						console.log(e);
 					})
 				}
-			}
+			}*/
 		}
 	};
 

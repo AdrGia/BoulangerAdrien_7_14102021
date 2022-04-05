@@ -1,6 +1,6 @@
-const { Model } = require('sequelize');
-const sequelize = new Model('sqlite::memory:');
 
+const sequelize = require('../connectDB');
+const DataTypes = require('sequelize/lib/data-types');
 
 const User = sequelize.define('user', {
 	firstName: {
@@ -25,4 +25,5 @@ const User = sequelize.define('user', {
 	}
 
 });
-console.log(user === sequelize.models.user);
+
+module.exports = User;

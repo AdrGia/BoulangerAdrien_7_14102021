@@ -86,7 +86,7 @@ exports.modifyPwd = (req, res, next) => {
 		.catch(error => res.status(406).json(error))
 };
 
-exports.modifyAvtar = (req, res, next) => {
+exports.modifyAvatar = (req, res, next) => {
 
 	try {
 		 const userObject = req.file

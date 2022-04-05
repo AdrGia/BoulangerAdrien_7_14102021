@@ -22,7 +22,7 @@
 		name: "Comment",
 		props: ['comment'],
 		methods: {
-
+			
 			comment(data) {
 				const formData = new FormData();
 				formData.append('image', data.comment.image);
