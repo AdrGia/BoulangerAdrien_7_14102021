@@ -76,6 +76,7 @@ export default {
 </script>
 
 <style lang="css">
+
 body {
   font-family: 'Poppins', sans-serif;
   align-items: center;
@@ -110,4 +111,6 @@ button {
 input {
   text-align: center;
 }
+
+
 </style>

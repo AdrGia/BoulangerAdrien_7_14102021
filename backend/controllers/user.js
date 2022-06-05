@@ -7,6 +7,7 @@ const getUser = require('../utils/jwtUtils');
 /*const { getCommentsOfEachPosts, getLikesOfEachPosts } = require('./post');*/
 
 exports.signup = (req, res, next) => {
+	console.log('DEBUG', req.body)
 	bcrypt.hash(req.body.password, 10)
 	User.create({
 		firstName: req.body.firstName,
@@ -15,7 +16,7 @@ exports.signup = (req, res, next) => {
 		password: req.body.password
 	})
 		.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
-		.catch(error => res.status(500).json(error.message))
+		.catch(error => res.status(500).json(error))
  };
 	
 

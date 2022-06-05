@@ -18,7 +18,7 @@ const app = express();
 
 db.authenticate()
 	.then(() => console.log('Database connected !'))
-	.catch(err => console.log('Error'))
+	.catch(err => console.log('Database error ! ', err))
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.KEY_CORS);
@@ -27,7 +27,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(session({ secret: process.env.KEY_COOKIES, cookie: {maxAge: 9000 }}))
+app.use(session({ secret: process.env.KEY_COOKIES, resave: true,
+    saveUninitialized: true, cookie: {maxAge: 9000 }}))
 
 
 app.use(bodyParser.json());

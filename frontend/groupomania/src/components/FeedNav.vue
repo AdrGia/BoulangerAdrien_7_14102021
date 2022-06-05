@@ -3,9 +3,6 @@
   <nav>
     <img class="image-logo" alt="Groupomania" src="../assets/icon.svg">
 	<div class="navbar">
-    <router-link :to="{ name: 'Profile', params: {id: 'yourProfile' } }">
-     <button class="navBtn">Profile</button> 
-    </router-link>
     <router-link to="/"><button class="navBtn">Déconnexion</button></router-link>
 	</div>
 </nav>
@@ -21,7 +18,6 @@
 
 <style lang="css">
 
-
 input {
   font-size: 1.3rem;
   border-radius: 5px;
@@ -31,7 +27,6 @@ input {
   height: 30px;
   margin: 0;
   width: 100px;
-  margin-right: 30px;
   background-color: #fff;
   border: 0;
   box-shadow: inset 0 0 0 0 #FFD7D7;
@@ -45,7 +40,6 @@ input {
 
 .image-logo {
   width: 300px;
-  margin-top: -20px;
  
 }
 

@@ -5,7 +5,8 @@
     </h1>
     <nav>  
      
-        <router-link to="/">Se connecter</router-link> |
+        <router-link to="/">Se connecter</router-link> 
+
         <router-link to="/Signup">S'inscrire</router-link>
  
     </nav>
@@ -19,7 +20,14 @@
 </script>
 
 <style>
-  img {
+img {
     margin-top: 100px;
   }
+
+nav {
+  margin-bottom: 50px;
+
+}
+
+
 </style>

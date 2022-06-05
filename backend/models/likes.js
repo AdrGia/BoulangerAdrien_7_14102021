@@ -2,16 +2,24 @@
 const sequelize = require('../connectDB');
 const DataTypes = require('sequelize/lib/data-types');
 
-const Likes = sequelize.define('likes' {
+const Likes = sequelize.define('like' {
+	id: {
+		type: DataTypes.INTEGER,
+		autoIncrement: true,
+		primaryKey: true
+	},
+
 	rate: {
 		type: Datatypes.DECIMAL,
 		allowNull: false,
 	},
-	userId: {
+
+	user_id: {
 		type: Datatypes.STRING,
 		allowNull: false,
 	},
-	postId: {
+
+	post_id: {
 		type: Datatypes.STRING,
 		allowNull: false,
 	}

@@ -2,16 +2,22 @@
 const sequelize = require('../connectDB');
 const DataTypes = require('sequelize/lib/data-types');
 
-const Post = sequelize.define('post', {
-	dateCreation: {
+const Posts = sequelize.define('post', {
+	id: {
+		type: DataTypes.INTEGER,
+		autoIncrement: true,
+		primaryKey: true
+	},
+
+	date: {
 		type: DataTypes.DATE,
 		allowNull : false
 	},
-	userId: {
+	user_id: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-	imageUrl: {
+	imageurl: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
@@ -21,4 +27,4 @@ const Post = sequelize.define('post', {
 	},
 });
 
-module.exports = Post;
+module.exports = Posts;

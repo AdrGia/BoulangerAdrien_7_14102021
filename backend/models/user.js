@@ -2,12 +2,18 @@
 const sequelize = require('../connectDB');
 const DataTypes = require('sequelize/lib/data-types');
 
-const User = sequelize.define('user', {
-	firstName: {
+const Users = sequelize.define('user', {
+	id: {
+		type: DataTypes.INTEGER,
+		autoIncrement: true,
+		primaryKey: true
+	},
+
+	firstname: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-	lastName: {
+	lastname: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
@@ -19,11 +25,11 @@ const User = sequelize.define('user', {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-	imageUrl: {
+	isadmin: {
 		type: DataTypes.STRING,
-		defaultValue: false
-	}
+		allowNull: false
+	},
 
 });
 
-module.exports = User;
+module.exports = Users;

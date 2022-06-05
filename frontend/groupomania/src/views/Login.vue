@@ -31,7 +31,7 @@ methods : {
 		this.$axios
 		.post("user/login", this.data)
 		.then((data) => {
-      sessionStorage.setItem('token', (data?.token ?? null));
+			sessionStorage.setItem('token', (data?.token ?? null));
 			this.router.push('Feed');
 		})
 		.catch((error)=> {

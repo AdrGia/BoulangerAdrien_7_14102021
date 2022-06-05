@@ -4,12 +4,12 @@
       name="post"
       class="post"
       cols="80"
-      rows="5"
+      rows="1"
       maxlength="180"
       required
       placeholder="Créer un post"
       aria-label="Ecrire un post"
-      v-model="legend"
+      v-model="post"
     ></textarea>
      
     <button type="button" class="button-gif">
@@ -25,10 +25,17 @@
 <script>
   export default {
     name: "createPost",
-    data: () => {
+    data() {
       return {
-        legend: "",
-        image: "",
+        post: {
+          id: "",
+          firstName: "",
+          lastName: "",
+          title: "",
+          image: "",
+          social: "",
+
+        },
       };
     },
     methods: {
@@ -39,7 +46,7 @@
         const formValid = document.getElementByName("formPost")[0].checkValidity();
         if(formValid) {
           this.$emit("post-sent", this.$data);
-          document.getElementByName("legend")[0].value = null;
+          document.getElementByName("body")[0].value = null;
           document.getElementByName("image")[0].value = null;
         }
       },
@@ -57,7 +64,12 @@ form {
   align-items: center;
 }
 textarea {
- height: 200px;
+ font: 1em sans-serif;
+  box-sizing: border-box;
+  border: 1px solid #999;
+   vertical-align: top;
+   height: 10em;
+   resize: none;
 }
 button {
   margin-top: 30px;
@@ -84,5 +96,16 @@ button {
   display: block;
   cursor: pointer;
 }
+
+
+@media screen and (max-width: 600px) {
+
+  textarea {
+    width: 100px;
+    height: 20em;
+  }
+  
+}
+
 
 </style>

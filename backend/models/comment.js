@@ -2,16 +2,22 @@
 const sequelize = require('../connectDB');
 const DataTypes = require('sequelize/lib/data-types');
 
-const Comment = sequelize.define('comment', {
-	dateCreation: {
+const Comments = sequelize.define('comment', {
+	id: {
+		type: DataTypes.INTEGER,
+		autoIncrement: true,
+		primaryKey: true
+	},
+	
+	date: {
 		type: DataTypes.DATE,
 		allowNull: false
 	},
-	userId: {
+	user_id: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-	postId: {
+	post_id: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
@@ -22,4 +28,4 @@ const Comment = sequelize.define('comment', {
 
 });
 
-module.exports = Comment;
+module.exports = Comments;

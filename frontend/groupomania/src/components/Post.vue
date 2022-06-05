@@ -21,16 +21,12 @@
 
 <script>
 	import Social from './Social.vue';
-	import createComment from './createComment.vue';
-	import Comment from './Comment.vue';
 
 	export default {
 		name: 'Post',
 		props: ['post'],
 		components: {
 			Social,
-			createComment,
-			Comment,
 		},
 		methods: {
 			getUserRole() {
@@ -63,7 +59,7 @@
 					}
 				});
 			},
-			post(data) {
+			newPost(data) {
 				const formData = new formData();
 				formData.append("image", data.post.image);
 				formData.append("body", data.post.body);
@@ -111,6 +107,11 @@
 </script>
 
 <style>
+
+
+
+Post
+
 section {
   width: 25em;
   background-color: #FFD7D7;
@@ -135,8 +136,7 @@ i {
 
 img {
   width: 30%;
-  border: 1px solid black;
-  border-radius: 50%;
+ 
 }
 
 .before-header {
@@ -159,5 +159,9 @@ button {
 h3 {
   padding-top: 15px;
 }
+
+
+
+
 
 </style>

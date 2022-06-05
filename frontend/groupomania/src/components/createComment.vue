@@ -18,9 +18,19 @@
 <script>
 	export default {
 		name: "createComment",
-		data: () => {
+		props: "postId",
+		data() {
 			return {
-				body: "",
+				post: {
+					id: "",
+					firstName: "",
+					lastName: "",
+					title: "",
+					image: "",
+					body: "",
+					social: "",
+
+				},
 			};
 		},
 		methods: {
@@ -35,6 +45,8 @@
 </script>
 
 <style lang="css">
+
+
 form {
   display: flex;
   flex-flow: column wrap;
@@ -51,11 +63,12 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: all .25s linear;
-  
+  background-color: #FFD7D7;
 }
 textarea {
  width: 700px;
  background-color: #FFD7D7; 
 }
+
 
 </style>

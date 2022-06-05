@@ -35,18 +35,9 @@ export default {
 </script>
 
 <style lang="css">
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;700&display=swap');
-body {
-  font-family: 'Poppins', sans-serif;
-  align-items: center;
-  justify-content: center;
-  
-}
-body {
-  display: flex;
-  flex-flow: wrap;
-  font-size: 1.2rem;
-}
+
 input {
   
   font-size: 1.2rem;
@@ -69,4 +60,5 @@ button {
   display: flex;
   justify-content: center;
 }
+
 </style>

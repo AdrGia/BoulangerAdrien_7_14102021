@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
-import Profile from '../views/Profile.vue';
 import Feed from '../views/Feed.vue';
 
 Vue.use(VueRouter);
@@ -18,20 +17,14 @@ const routes = [
 
 {
 
-	path: '/Login',
+	path: '/',
 	name: 'Login',
 	component: Login
 },
 
-{
-
-	path: '/Profile',
-	name: 'Profile',
-	component: Profile
-},
 
 {
-	path: '/',
+	path: '/Feed',
 	name: 'Feed',
 	component: Feed
 },

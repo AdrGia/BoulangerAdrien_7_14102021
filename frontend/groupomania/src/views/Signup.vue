@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 			<loginNav/>
-      <signupInfo v-on:sendRequest="signUp"></signupInfo>
+      <signupInfo v-on:sendRequest="signUp($event)"></signupInfo>
 		</div>
 </template>
 
@@ -26,17 +26,17 @@ export default {
 	
 	methods: {
     signUp(data) {
+      console.log(data);
       this.firstName = data.firstName;
       this.lastName = data.lastName;
       this.email = data.email;
       this.password = data.password;
+      console.log(this.data);
       this.$axios
-          .post("user/signup", this.data)
-          .then(() => {
-            this.$axios.post('user/signup', this.data).then( (data) => {
-              sessionStorage.setItem('token', (data?.token ?? null));
-              this.$router.push('Feed');
-            })
+          .post("user/signup", data)
+          .then((data) => {
+            sessionStorage.setItem('token', (data?.token ?? null));
+            this.$router.push('Feed');
           })
           .catch((error) => {
             if (error.response.status === 500) {

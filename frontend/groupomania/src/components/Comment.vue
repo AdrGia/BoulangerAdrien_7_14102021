@@ -1,7 +1,7 @@
 
 <template>
 	<section>
-		<div class="block-comment">
+		<div class="block-comment" :id="comment.id">
 			<div class="before-header">
 				<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="modifyComment"></i>
 				<i class="fas fa-times" role="button" title="Supprimer le commentaire" v-on:click="deleteComment"></i>
@@ -23,7 +23,7 @@
 		props: ['comment'],
 		methods: {
 			
-			comment(data) {
+			newComment(data) {
 				const formData = new FormData();
 				formData.append('image', data.comment.image);
 				formData.append('body', data.comment.body);
@@ -55,6 +55,7 @@
 
 <style>
 
+
 section {
   width: 25em;
   background-color: #FFD7D7;
@@ -65,27 +66,22 @@ section {
   padding-left: 5px;
   border-radius: 15px;
 } 
-
 i {
   color: white;
   cursor: pointer;
   font-size: 1.3em;
   padding-left: 5px;
 }
-
 img {
   width: 30%;
-  border: 1px solid black;
-  border-radius: 50%;
+ 
 }
-
 .before-header {
   display: flex;
   justify-content: right;
   padding-top: 5px;
   padding-right: 10px;
 }
-
 .body-comment {
   padding-top: 30px;
 }
