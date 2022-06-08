@@ -5,7 +5,7 @@ module.exports = {
   tokenSign : 'process.env.KEY_TOKEN_PASSWORD',
   	newToken: function (user) {
     return jwt.sign({
-      userId: user.id,
+      user_id: user.id,
       isAdmin: user.isAdmin
     },
       this.tokenSign,
@@ -18,7 +18,7 @@ module.exports = {
       let token = data.split(' ')[1];
       try {
         let decodedToken = jwt.verify(token, this.tokenSign)
-        userId = decodedToken.userId
+        user_id = decodedToken.user_id
         return userId
       }
       catch (err) {

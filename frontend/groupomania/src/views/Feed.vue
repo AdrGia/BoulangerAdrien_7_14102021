@@ -20,7 +20,7 @@
 			createPost,
 			containerPost,
 		},
-	
+		
 		mounted() {
 			console.log('DEBUG', this.posts);
 			

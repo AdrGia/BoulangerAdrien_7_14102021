@@ -31,7 +31,8 @@ export default {
       this.lastName = data.lastName;
       this.email = data.email;
       this.password = data.password;
-      console.log(this.data);
+      this.isAdmin = data.isAdmin;
+      
       this.$axios
           .post("user/signup", data)
           .then((data) => {
@@ -44,6 +45,8 @@ export default {
             }
             sessionStorage.removeItem('token');
           });
+
+      console.log(this.data);
     }
   },
   mounted() {

@@ -1,6 +1,6 @@
 
 <template>
-	<section class="block-post" :id="post.id">
+	<section class="block-post" :id="post_id">
 		<div class="before-header">
 			<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="updatePost"></i>
 			<i class="fas fa-times" role="button" title="Supprimer le post" v-on:click="deletePost"></i>
@@ -71,18 +71,18 @@
 				})
 				.catch((e) => console.log(e));
 			},
-			updatePost(postId) {
+			updatePost(post_id) {
 				this.$axios
-				.update("post/" + postId)
+				.update("post/" + post_id)
 				.then(() => {
 					this.alertActive("Post modifié !")
 				})
 				.catch((e) => console.log(e));
 
 			},
-			deletePost(postId) {
+			deletePost(post_id) {
 				this.$axios
-				.delete("post/" + postId)
+				.delete("post/" + post_id)
 				.then(() => {
 					this.alertActive("Post supprimé !");
 				})

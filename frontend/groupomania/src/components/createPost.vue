@@ -100,10 +100,7 @@ button {
 
 @media screen and (max-width: 600px) {
 
-  textarea {
-    width: 100px;
-    height: 20em;
-  }
+
   
 }
 

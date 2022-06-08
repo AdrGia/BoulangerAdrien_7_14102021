@@ -61,13 +61,14 @@ export default {
       const lastNameValid = document.getElementById("lastName")
       const emailValid = document.getElementById("email")
       const passwordValid = document.getElementById("password")
+      
       if (firstNameValid && lastNameValid && emailValid && passwordValid) {
         this.$emit("sendRequest", {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
           password: this.password,
-          message: this.message,
+          
         });
       }
     }

@@ -26,7 +26,7 @@ const Users = sequelize.define('user', {
 		allowNull: false
 	},
 	isadmin: {
-		type: DataTypes.STRING,
+		type: DataTypes.BOOLEAN,
 		allowNull: false
 	},
 

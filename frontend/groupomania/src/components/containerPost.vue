@@ -1,6 +1,6 @@
 <template>
 	<div class="post-container">
-		<Post v-for="post in posts" :key="post.postId" :post="post">
+		<Post v-for="post in posts" :key="post.post_id" :post="post">
 			<div class="block-comment">
 				<createComment v-on: comment-sent="comment"/>
 				<Comment

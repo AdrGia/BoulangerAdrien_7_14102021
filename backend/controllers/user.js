@@ -13,7 +13,8 @@ exports.signup = (req, res, next) => {
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
 		email: req.body.email,
-		password: req.body.password
+		password: req.body.password,
+		isAdmin: false,
 	})
 		.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
 		.catch(error => res.status(500).json(error))

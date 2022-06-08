@@ -1,7 +1,7 @@
 
 <template>
 	<section>
-		<div class="block-comment" :id="comment.id">
+		<div class="block-comment" :id="comment_id">
 			<div class="before-header">
 				<i class="fa-solid fa-pen" role="button" title="Modifier le post" v-on:click="modifyComment"></i>
 				<i class="fas fa-times" role="button" title="Supprimer le commentaire" v-on:click="deleteComment"></i>
@@ -33,17 +33,17 @@
 				})
 				.catch((e) => console.log(e))
 			},
-			modifyComment(commentId) {
+			modifyComment(comment_id) {
 				this.$axios
-				.update("comment/" + commentId)
+				.update("comment/" + comment_id)
 				.then(() => {
 					this.alertActive("Commentaire modifié !")
 				})
 				.catch((e) => console.log(e))
 			},
-			deleteComment(commentId) {
+			deleteComment(comment_id) {
 				this.$axios
-				.delete("comment/" + commentId)
+				.delete("comment/" + comment_id)
 				.then(() => {
 					this.alertActive("Commentaire supprimé !")
 				})
