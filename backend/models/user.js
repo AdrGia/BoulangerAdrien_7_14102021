@@ -30,6 +30,14 @@ const Users = sequelize.define('user', {
 		allowNull: false
 	},
 
-});
+
+}, {
+
+    timestamps: false,
+    
+  }
+);
+
+
 
 module.exports = Users;

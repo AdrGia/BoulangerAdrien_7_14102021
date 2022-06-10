@@ -19,7 +19,7 @@ module.exports = {
       try {
         let decodedToken = jwt.verify(token, this.tokenSign)
         user_id = decodedToken.user_id
-        return userId
+        return user_id
       }
       catch (err) {
         return err

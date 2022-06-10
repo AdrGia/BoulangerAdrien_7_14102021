@@ -25,13 +25,14 @@ export default {
 },
 methods : {
 	login(data) {
+	console.log(data);
     this.email = data.email;
     this.password = data.password;
 
 		this.$axios
-		.post("user/login", this.data)
+		.post("user/login", {email: this.email, password: this.password})
 		.then((data) => {
-			sessionStorage.setItem('token', (data?.token ?? null));
+			sessionStorage.setItem('jwt', (data?.token ?? null));
 			this.router.push('Feed');
 		})
 		.catch((error)=> {
@@ -41,12 +42,13 @@ methods : {
 			if(error.response.status === 500) {
 				this.message = error.response.message;
 			}
-			sessionStorage.removeItem("token");
+			sessionStorage.removeItem("jwt");
 			});
+		console.log(this.data);
 		},
 	},
 	mounted() {
-		sessionStorage.removeItem("token");
+		sessionStorage.removeItem("jwt");
 		delete this.$axios.defaults.headers.common["Authorization"];
 		document.tittle = "Se connecter"
 	}

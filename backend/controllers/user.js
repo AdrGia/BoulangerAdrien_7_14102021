@@ -10,33 +10,55 @@ exports.signup = (req, res, next) => {
 	console.log('DEBUG', req.body)
 	bcrypt.hash(req.body.password, 10)
 	User.create({
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
+		firstname: req.body.firstName,
+		lastname: req.body.lastName,
 		email: req.body.email,
 		password: req.body.password,
-		isAdmin: false,
+		isadmin: false,
 	})
 		.then(hash => res.status(201).json({ message: "Utilisateur créé !" }))
-		.catch(error => res.status(500).json(error))
+		.catch(error => res.status(500).json({
+	errors:
+	{
+		code: error.code,
+		message: error.message
+	}
+}))
  };
 	
 
 exports.login = async (req, res, next) => {
-	User.findOne({email: req.body.email})
+	console.log(req.body);
+	User.findOne({where: {email: req.body.email}})
 	.then(user => {
+		return res.status(200).json(user);
 		if(!user) {
 			return res.status(401).json({ error: 'Utilisateur incorrect !' });
-		}
+		} 
 		bcrypt.compare(req.body.password, user.password)
 			.then(valid => {
+				console.log("DEBUG", valid);
 				if(!valid){
 					return res.status(401).json({ error: 'Mot de passe non valide !' });
 				}
-				res.status(201).json(newToken(response.message));
+				res.status(201).json({
+            		user_id: user._id,
+            		token: jwt.sign (
+            		{ user_id: user._id },
+            		process.env.TOKEN_KEY,
+            		{ expiresIn: '1d'}
+            		)
+          		});
 			})
-			.catch(error => res.status(500).json({ error }));
+			
 	})
-	.catch(error => res.status(500).json({ error }));
+	.catch(error => res.status(500).json({
+	errors:
+	{
+		code: error.code,
+		message: error.message
+	}
+}));
 
 };
 
